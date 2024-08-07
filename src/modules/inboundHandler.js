@@ -92,6 +92,9 @@ async function handleAsyncForecastGeneration(buId) {
   console.log("[OFG.INBOUND] Handling async forecast generation");
   const topics = ["shorttermforecasts.generate"];
 
+  // temp logging
+  console.warn("[OFG.TEMP] Check applicationConfig", applicationConfig);
+
   function onSubscriptionSuccess() {
     console.log(
       "[OFG.INBOUND] Successfully subscribed to forecast generate notifications"
