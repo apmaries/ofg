@@ -154,7 +154,7 @@ async function handleInboundForecastNotification(notification) {
 
     if (status === "Complete") {
       const forecastId = notification.eventBody.result.id;
-      applicationConfig.inbound.inboundForecastId = forecastId;
+      applicationConfig.inbound.inboundFcId = forecastId;
       const inboundForecastData = await getInboundForecastData(forecastId);
       await transformAndLoadInboundForecast(inboundForecastData);
       window.dispatchEvent(
