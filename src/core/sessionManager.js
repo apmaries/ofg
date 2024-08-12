@@ -51,6 +51,11 @@ export async function startSession() {
     appUser = user.name;
     applicationConfig.notifications.uri = channel.connectUri;
     applicationConfig.notifications.id = channel.id;
+
+    // temporary log
+    console.log("[OFG] User details: ", user);
+    console.log("[OFG] Notifications channel: ", channel);
+    console.log("[OFG] Application config: ", applicationConfig);
   }
 
   // Update the UI to welcome the user
