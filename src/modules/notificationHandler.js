@@ -4,6 +4,9 @@
 // Shared state modules
 import { applicationConfig } from "../core/configManager.js";
 
+// API instances
+import { napi } from "../app.js";
+
 // Global variables
 ("use strict");
 const testMode = applicationConfig.testMode;
@@ -59,8 +62,6 @@ export class NotificationHandler {
       console.log("%c[OFG] Skipping subscription in test mode", "color: red");
       return;
     } else {
-      let apiInstance = new window.ofg.PlatformClient.NotificationsApi();
-
       let body = this.topics.map((topic) => ({
         "id": `v2.workforcemanagement.businessunits.${this.buId}.${topic}`,
       }));
@@ -72,7 +73,7 @@ export class NotificationHandler {
       // Add a list of subscriptions to the existing list of subscriptions
       body.forEach((topicObj) => {
         let topic = topicObj.id.split(".").pop();
-        apiInstance
+        napi
           .postNotificationsChannelSubscriptions(this.id, [topicObj], opts)
           .then((data) => {
             console.debug(
