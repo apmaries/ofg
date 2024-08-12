@@ -19,7 +19,7 @@ const testMode = applicationConfig.testMode;
 // Function to generate the forecast
 async function generateAbmForecast(buId, weekStart, description) {
   console.log("[OFG.INBOUND] Generating ABM forecast");
-  const abmFcDescription = description + " (OFG Inbound ABM)";
+  const abmFcDescription = "OFG Inbound FC - " + description;
 
   let body = {
     "description": abmFcDescription,
