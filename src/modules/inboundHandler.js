@@ -93,7 +93,7 @@ async function handleAsyncForecastGeneration(buId) {
   const topics = ["shorttermforecasts.generate"];
 
   // temp logging
-  console.warn("[OFG.TEMP] Check applicationConfig", applicationConfig);
+  console.log("[OFG.TEMP] Check applicationConfig", applicationConfig);
 
   function onSubscriptionSuccess() {
     console.log(
