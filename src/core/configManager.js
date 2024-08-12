@@ -13,7 +13,7 @@ let applicationConfig = {
     { id: "0", name: "Sunday" },
   ],
   forecastId: null,
-  inbound: { inboundMode: false, inboundFcId: null },
+  inbound: { inboundMode: false, inboundFcId: null, operationId: null },
   notifications: {
     uri: "",
     id: "",
