@@ -16,8 +16,6 @@ import { NotificationHandler } from "./notificationHandler.js";
 ("use strict");
 const testMode = applicationConfig.testMode;
 
-let generateOperationId;
-
 // Function to generate the forecast
 async function generateAbmForecast(buId, weekStart, description) {
   console.log("[OFG.INBOUND] Generating ABM forecast");
@@ -269,7 +267,14 @@ export async function generateInboundForecast() {
     );
     return inboundForecastData;
   } else if (generateResponse.status === "Processing") {
+    // temp logging
+    console.log("[OFG.TEMP] generateResponse", generateResponse);
+
     // Asynchronous handling through notifications
+    let operationId = generateResponse.operationId;
+
+    applicationConfig.inbound.operationId = operationId;
+
     return handleAsyncForecastGeneration(buId);
   } else {
     console.error(
