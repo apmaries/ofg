@@ -8,14 +8,14 @@ import { applicationConfig } from "../core/configManager.js";
 ("use strict");
 const testMode = applicationConfig.testMode;
 
-let notificationsUri = applicationConfig.notifications.uri;
-let notificationsId = applicationConfig.notifications.id;
+//let notificationsUri = applicationConfig.notifications.uri;
+// let notificationsId = applicationConfig.notifications.id;
 
 // Class to handle WebSocket notifications
 export class NotificationHandler {
   constructor(topics, buId, onSubscribed, onMessage) {
-    this.uri = notificationsUri;
-    this.id = notificationsId;
+    this.uri = applicationConfig.notifications.uri;
+    this.id = applicationConfig.notifications.id;
 
     if ((!this.uri || !this.id) && !testMode) {
       alert("An error occurred. Please refresh the page and try again.");
