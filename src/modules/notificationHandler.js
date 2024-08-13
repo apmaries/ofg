@@ -51,15 +51,18 @@ export class NotificationHandler {
   }
 
   onOpen(event) {
-    console.log("[OFG] WebSocket connection opened");
+    console.log("[OFG.NOTIFICATIONS] WebSocket connection opened");
     // Add your code here
   }
 
   subscribeToNotifications() {
-    console.info("[OFG] Subscribing to forecast notifications");
+    console.info("[OFG.NOTIFICATIONS] Subscribing to forecast notifications");
 
     if (testMode) {
-      console.log("%c[OFG] Skipping subscription in test mode", "color: red");
+      console.log(
+        "%c[OFG.NOTIFICATIONS] Skipping subscription in test mode",
+        "color: red"
+      );
       return;
     } else {
       let body = this.topics.map((topic) => ({
@@ -77,7 +80,7 @@ export class NotificationHandler {
           .postNotificationsChannelSubscriptions(this.id, [topicObj], opts)
           .then((data) => {
             console.debug(
-              `[OFG] Subscribed to ${topic} notifications in BU ${this.buId}: `,
+              `[OFG.NOTIFICATIONS] Subscribed to ${topic} notifications in BU ${this.buId}: `,
               data
             );
             if (this.onSubscribed) {
@@ -86,7 +89,7 @@ export class NotificationHandler {
           })
           .catch((err) => {
             console.error(
-              `[OFG] Error subscribing to ${topic} notifications in BU ${this.buId}: `,
+              `[OFG.NOTIFICATIONS] Error subscribing to ${topic} notifications in BU ${this.buId}: `,
               err
             );
           });
@@ -99,18 +102,20 @@ export class NotificationHandler {
     const topicName = notification.topicName;
 
     if (topicName !== "channel.metadata") {
-      console.log(`[OFG] Received notification for topic ${topicName}`);
+      console.log(
+        `[OFG.NOTIFICATIONS] Received notification for topic ${topicName}`
+      );
       this.onMessage(notification);
     }
   }
 
   onClose(event) {
-    console.log("[OFG] WebSocket connection closed");
+    console.log("[OFG.NOTIFICATIONS] WebSocket connection closed");
     // Add any other code here
   }
 
   onError(event) {
-    console.log("[OFG] WebSocket error: ", event);
+    console.log("[OFG.NOTIFICATIONS] WebSocket error: ", event);
     // Add any other code here
   }
 }
