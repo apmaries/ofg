@@ -105,9 +105,12 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
       "weekCount": 1,
       "planningGroups": planningGroupsArray,
     };
-  } catch (error) {
-    console.error("[OFG.IMPORT] Error creating forecast import body: ", error);
-    throw error;
+  } catch (bodyError) {
+    console.error(
+      "[OFG.IMPORT] Error creating forecast import body: ",
+      bodyError
+    );
+    throw bodyError;
   }
 
   let fcImportGzip;
@@ -116,9 +119,9 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     // Gzip encode the body
     fcImportGzip = gzipEncode(fcImportBody);
     contentLengthBytes = fcImportGzip.length;
-  } catch (error) {
-    console.error("[OFG.IMPORT] Error encoding body to gzip: ", error);
-    throw error;
+  } catch (gzipError) {
+    console.error("[OFG.IMPORT] Error encoding body to gzip: ", gzipError);
+    throw gzipError;
   }
   console.log(
     `[OFG.IMPORT] Body encoded to gzip with length: ${contentLengthBytes}`
@@ -145,9 +148,9 @@ export async function generateUrl(
         }
       );
     return importUrl;
-  } catch (error) {
-    console.error("[OFG.IMPORT] Error generating import URL: ", error);
-    throw error;
+  } catch (urlError) {
+    console.error("[OFG.IMPORT] Error generating import URL: ", urlError);
+    throw urlError;
   }
 }
 
@@ -190,9 +193,9 @@ export async function invokeGCF(uploadAttributes, forecastData) {
     } else {
       throw new Error(responseText);
     }
-  } catch (error) {
-    console.error(`[OFG.IMPORT] ${error}`);
-    throw new Error(error);
+  } catch (importError) {
+    console.error(`[OFG.IMPORT] ${importError}`);
+    throw new Error(importError);
   }
 }
 
@@ -211,8 +214,8 @@ export async function importFc(businessUnitId, weekDateId, uploadKey) {
 
     console.debug("[OFG.IMPORT] Import response: ", importResponse);
     return importResponse;
-  } catch (error) {
-    console.error("[OFG.IMPORT] Error importing forecast: ", error);
-    throw error;
+  } catch (importError) {
+    console.error("[OFG.IMPORT] Error importing forecast: ", importError);
+    throw importError;
   }
 }
