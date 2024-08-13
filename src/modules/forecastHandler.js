@@ -410,6 +410,8 @@ export async function importForecast() {
 
         const handleImportNotification = (message) => {
           console.log("[OFG.IMPORT] Notification received:", message);
+
+          document.getElementById("open-forecast-button").disabled = false;
         };
 
         try {

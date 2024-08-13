@@ -509,7 +509,6 @@ async function loadPageThree() {
 
     try {
       await importForecast();
-      document.getElementById("open-forecast-button").disabled = false;
     } catch (error) {
       console.error("[OFG.UI] Forecast import failed");
     }
@@ -598,6 +597,9 @@ function resetPageFour() {
     "import-results-container-new",
     "results-loading-message"
   );
+
+  // Reset open button to disabled
+  document.getElementById("open-forecast-button").disabled = true;
 }
 
 function cleanUserInputs() {
