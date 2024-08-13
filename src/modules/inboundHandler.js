@@ -141,6 +141,7 @@ async function handleInboundForecastNotification(notification) {
     "[OFG.INBOUND] Handling inbound forecast notification",
     notification
   );
+  let generateOperationId = applicationConfig.inbound.operationId;
 
   // temp logging
   console.log("[OFG.TEMP] Check applicationConfig", applicationConfig);
