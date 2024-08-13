@@ -300,12 +300,12 @@ export function deleteInboundForecast() {
   // Delete the forecast
   let delResponse = null;
   try {
-    delResponse = handleApiCalls(
-      "WorkforceManagementApi.deleteWorkforcemanagementBusinessunitWeekShorttermforecast",
-      buId,
-      weekStart,
-      forecastId
-    );
+    delResponse =
+      wapi.deleteWorkforcemanagementBusinessunitWeekShorttermforecast(
+        buId,
+        weekStart,
+        forecastId
+      );
   } catch (error) {
     console.error("[OFG.INBOUND] Inbound forecast deletion failed!", error);
     alert(
