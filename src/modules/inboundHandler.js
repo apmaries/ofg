@@ -325,6 +325,6 @@ export async function deleteInboundForecast() {
   } else {
     // Reset the forecast ID
     applicationConfig.inbound.inboundForecastId = null;
-    console.log("[OFG.INBOUND] Inbound forecast deleted", delResponse);
+    console.log("[OFG.INBOUND] Inbound forecast deleted");
   }
 }
