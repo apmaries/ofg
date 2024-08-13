@@ -263,4 +263,7 @@ export function displayErrorReason(elem, genereicMessage, specificMessage) {
   let specificP = document.createElement("p");
   specificP.innerHTML = specificMessage;
   elemToDisplay.appendChild(specificP);
+
+  // Display the element
+  elemToDisplay.style.display = "block";
 }
