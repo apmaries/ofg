@@ -199,26 +199,13 @@ export function rotateDaysOfWeek() {
   applicationConfig.daysOfWeek = rotatedDays;
 }
 
-export function populateMessage(className, innerHTML, reason) {
-  const resultsContainer = document.getElementById("import-results-container");
+export function populateErrorMessage(error) {
+  const errorContainer = document.getElementById("import-fail-div");
 
   let message = document.createElement("div");
-  message.className = className;
-  message.innerHTML = innerHTML;
-  resultsContainer.appendChild(message);
-
-  if (reason) {
-    const errorReason = document.createElement("div");
-    errorReason.innerHTML = reason;
-    resultsContainer.appendChild(errorReason);
-  }
-
-  if (className === "alert-success") {
-    console.log("[OFG] Import successful");
-    document.getElementById("open-forecast-button").removeAttribute("disabled");
-  }
-
-  // TODO: Find a way to allow user to navigate main GC browser window to new forecast
+  message.className = "alert-danger";
+  message.innerHTML = error;
+  errorContainer.appendChild(message);
 }
 
 export function getNextWeekdayDate(startDate, weekday) {
