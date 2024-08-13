@@ -189,12 +189,14 @@ export async function invokeGCF(uploadAttributes, forecastData) {
 
     if (response.status == 200) {
       console.log(`[OFG.IMPORT] ${responseText}`);
+      console.info("[OFG] This");
       return response.status;
     } else {
       throw new Error(responseText);
     }
   } catch (importError) {
     console.error(`[OFG.IMPORT] ${importError}`);
+    console.info("[OFG] That");
     throw new Error(importError);
   }
 }
