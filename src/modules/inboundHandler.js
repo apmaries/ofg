@@ -134,10 +134,8 @@ async function handleAsyncForecastGeneration(buId) {
 
 // Handle the inbound forecast notification
 async function handleInboundForecastNotification(notification) {
-  console.log(
-    "[OFG.INBOUND] Handling inbound forecast notification",
-    notification
-  );
+  console.log("[OFG.INBOUND] Notification received:", notification);
+
   let generateOperationId = applicationConfig.inbound.operationId;
 
   if (
