@@ -434,7 +434,7 @@ export async function importForecast() {
       }
     }
   } catch (error) {
-    displayErrorReason("Forecast import failed!", error.message || error);
+    console.error("[OFG.IMPORT] Forecast import failed:", error);
   }
 }
 
