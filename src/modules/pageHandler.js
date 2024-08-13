@@ -515,8 +515,8 @@ async function loadPageThree() {
       document.getElementById("open-forecast-button").disabled = false;
     } catch (error) {
       console.error("[OFG.UI] Forecast import failed");
-      const [genericMessage, specificMessage] = error.message.split("|");
-      populateErrorMessage(genericMessage, specificMessage);
+      // const [genericMessage, specificMessage] = error.message.split("|");
+      populateErrorMessage(error);
     }
 
     removeEventListeners(planningGroupDropdown, "change");
