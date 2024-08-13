@@ -26,7 +26,6 @@ import {
   updateLoadingMessage,
   switchPages,
   getNextWeekdayDate,
-  populateErrorMessage,
 } from "../utils/domUtils.js";
 import { addEvent, removeEventListeners } from "../utils/eventUtils.js";
 import {
@@ -416,8 +415,6 @@ async function loadPageTwo() {
       await loadPageThree();
     } catch (error) {
       console.error("[OFG.UI] Forecast generation failed");
-      const [genericMessage, specificMessage] = error.message.split("|");
-      populateErrorMessage(genericMessage, specificMessage);
       switchPages("page-three", "page-four");
       await loadPageFour();
     }
@@ -515,8 +512,6 @@ async function loadPageThree() {
       document.getElementById("open-forecast-button").disabled = false;
     } catch (error) {
       console.error("[OFG.UI] Forecast import failed");
-      // const [genericMessage, specificMessage] = error.message.split("|");
-      populateErrorMessage(error);
     }
 
     removeEventListeners(planningGroupDropdown, "change");
