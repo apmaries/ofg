@@ -410,6 +410,13 @@ export async function importForecast() {
         unhideElement("import-step-three");
       }
 
+      // temp logging
+      console.log(
+        "[OFG.TEMP] uploadResponse = ",
+        uploadResponse,
+        uploadResponse.status
+      );
+
       if (uploadResponse && uploadResponse.status === 200) {
         console.info("[OFG.IMPORT] Forecast upload to URL successful");
 
