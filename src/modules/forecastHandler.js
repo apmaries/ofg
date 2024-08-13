@@ -245,7 +245,6 @@ export async function generateForecast() {
     }
   } catch (queryError) {
     displayErrorReason(
-      "import-fail-div",
       "Error executing historical data queries",
       queryError.message || queryError
     );
@@ -259,7 +258,6 @@ export async function generateForecast() {
     await processQueryResults(queryResults);
   } catch (processingError) {
     displayErrorReason(
-      "import-fail-div",
       "Error processing query results",
       processingError.message || processingError
     );
@@ -270,7 +268,6 @@ export async function generateForecast() {
     await prepareForecast();
   } catch (prepError) {
     displayErrorReason(
-      "import-fail-div",
       "Error preparing forecast",
       prepError.message || prepError
     );
@@ -296,7 +293,6 @@ export async function generateForecast() {
       console.info("[OFG.GENERATE] Inbound groups processed");
     } catch (inboundError) {
       displayErrorReason(
-        "import-fail-div",
         "Error generating inbound forecast",
         inboundError.message || inboundError
       );
@@ -341,7 +337,6 @@ export async function importForecast() {
       } catch (prepError) {
         unhideElement("import-step-one-fail-icon");
         displayErrorReason(
-          "import-fail-card",
           "Import file preparation failed!",
           prepError.message || prepError
         );
@@ -360,7 +355,6 @@ export async function importForecast() {
       } catch (urlError) {
         unhideElement("import-step-two-fail-icon");
         displayErrorReason(
-          "import-fail-card",
           "Upload URL generation failed!",
           urlError.message || urlError
         );
@@ -385,7 +379,6 @@ export async function importForecast() {
         console.warn(uploadError.message);
         unhideElement("import-step-three-fail-icon");
         displayErrorReason(
-          "import-fail-div",
           "Import file upload failed!",
           uploadError.message || uploadError
         );
@@ -407,7 +400,6 @@ export async function importForecast() {
           } catch (runImportError) {
             unhideElement("import-step-four-fail-icon");
             displayErrorReason(
-              "import-fail-card",
               "Forecast import failed!",
               runImportError.message || runImportError
             );
@@ -432,26 +424,17 @@ export async function importForecast() {
           importNotifications.subscribeToNotifications();
         } catch (notificationError) {
           displayErrorReason(
-            "import-fail-card",
             "Subscribing to notifications failed!",
             notificationError.message || notificationError
           );
         }
       } else {
         const reason = uploadResponse.data.reason;
-        displayErrorReason(
-          "import-fail-card",
-          "Forecast import failed!",
-          reason
-        );
+        displayErrorReason("Forecast import failed!", reason);
       }
     }
   } catch (error) {
-    displayErrorReason(
-      "import-fail-card",
-      "Forecast import failed!",
-      error.message || error
-    );
+    displayErrorReason("Forecast import failed!", error.message || error);
   }
 }
 

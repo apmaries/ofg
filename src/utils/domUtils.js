@@ -254,18 +254,19 @@ export async function unhideElement(elementId) {
   element.style.display = "block";
 }
 
-export function displayErrorReason(elem, genereicMessage, specificMessage) {
-  const elemToDisplay = document.getElementById(elem);
+export function displayErrorReason(genereicMessage, specificMessage) {
+  const errorDiv = document.getElementById("import-fail-div");
+  const errorCard = document.getElementById("import-fail-card");
 
   // Append a p tag with the message
   let header = document.createElement("h4");
   header.innerHTML = genereicMessage;
-  elemToDisplay.appendChild(header);
+  errorCard.appendChild(header);
 
   let specificP = document.createElement("p");
   specificP.innerHTML = specificMessage;
-  elemToDisplay.appendChild(specificP);
+  errorCard.appendChild(specificP);
 
   // Display the element
-  elemToDisplay.style.display = "block";
+  errorDiv.style.display = "block";
 }
