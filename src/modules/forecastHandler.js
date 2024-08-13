@@ -226,10 +226,11 @@ export async function generateForecast() {
     );
     intervals = await intervalBuilder();
   } catch (queryBodyError) {
-    handleFcError(
-      "Error generating historical data queries",
-      queryBodyError.message || queryBodyError
+    console.error(
+      "[OFG.GENERATE] Error generating historical data queries: ",
+      queryBodyError
     );
+    throw queryBodyError;
   }
 
   let queryResults = [];
