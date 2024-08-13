@@ -264,7 +264,6 @@ export async function generateInboundForecast() {
   } else if (generateResponse.status === "Processing") {
     // Asynchronous handling through notifications
     let operationId = generateResponse.operationId;
-
     applicationConfig.inbound.operationId = operationId;
 
     return handleAsyncForecastGeneration(buId);
