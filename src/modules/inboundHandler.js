@@ -90,9 +90,6 @@ async function handleAsyncForecastGeneration(buId) {
   console.log("[OFG.INBOUND] Handling async forecast generation");
   const topics = ["shorttermforecasts.generate"];
 
-  // temp logging
-  console.log("[OFG.TEMP] Check applicationConfig", applicationConfig);
-
   function onSubscriptionSuccess() {
     console.log(
       "[OFG.INBOUND] Successfully subscribed to forecast generate notifications"
@@ -142,9 +139,6 @@ async function handleInboundForecastNotification(notification) {
     notification
   );
   let generateOperationId = applicationConfig.inbound.operationId;
-
-  // temp logging
-  console.log("[OFG.TEMP] Check applicationConfig", applicationConfig);
 
   if (
     notification.eventBody &&
@@ -268,9 +262,6 @@ export async function generateInboundForecast() {
     );
     return inboundForecastData;
   } else if (generateResponse.status === "Processing") {
-    // temp logging
-    console.log("[OFG.TEMP] generateResponse", generateResponse);
-
     // Asynchronous handling through notifications
     let operationId = generateResponse.operationId;
 
@@ -288,13 +279,11 @@ export async function generateInboundForecast() {
 
 // Function to delete the inbound forecast
 export function deleteInboundForecast() {
-  console.log(
-    `[OFG.INBOUND] Deleting inbound forecast with id: ${applicationConfig.inbound.inboundForecastId}`
-  );
-
   const buId = applicationState.userInputs.businessUnit.id;
   const weekStart = applicationState.userInputs.forecastParameters.weekStart;
-  const forecastId = applicationConfig.inbound.inboundForecastId;
+  const forecastId = applicationConfig.inbound.inboundFcId;
+
+  console.log(`[OFG.INBOUND] Deleting inbound forecast with id: ${forecastId}`);
 
   // Return if forecast ID is not set
   if (!forecastId) {
