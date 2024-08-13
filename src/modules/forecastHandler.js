@@ -378,7 +378,7 @@ export async function importForecast() {
         console.warn(uploadError.message);
         unhideElement("import-step-three-fail-icon");
         displayErrorReason(
-          "import-fail-card",
+          "import-fail-div",
           "Import file upload failed!",
           uploadError.message || uploadError
         );
