@@ -312,7 +312,19 @@ export async function deleteInboundForecast() {
     return;
   }
 
-  // Reset the forecast ID
-  applicationConfig.inbound.inboundForecastId = null;
-  console.log("[OFG.INBOUND] Inbound forecast deleted", delResponse);
+  // Validate response status code
+  if (delResponse.status !== 204) {
+    console.error(
+      "[OFG.INBOUND] Inbound forecast deletion failed with status: ",
+      delResponse
+    );
+    alert(
+      "An error occurred while deleting the inbound forecast. Please delete manually via UI."
+    );
+    return;
+  } else {
+    // Reset the forecast ID
+    applicationConfig.inbound.inboundForecastId = null;
+    console.log("[OFG.INBOUND] Inbound forecast deleted", delResponse);
+  }
 }
