@@ -199,6 +199,7 @@ export function rotateDaysOfWeek() {
   applicationConfig.daysOfWeek = rotatedDays;
 }
 
+/*
 export function populateErrorMessage(error) {
   const errorContainer = document.getElementById("import-fail-div");
 
@@ -207,6 +208,7 @@ export function populateErrorMessage(error) {
   message.innerHTML = error;
   errorContainer.appendChild(message);
 }
+*/
 
 export function getNextWeekdayDate(startDate, weekday) {
   // Convert the startDate string to a Date object
@@ -256,9 +258,9 @@ export function displayErrorReason(elem, genereicMessage, specificMessage) {
   const elemToDisplay = document.getElementById(elem);
 
   // Append a p tag with the message
-  let genericP = document.createElement("p");
-  genericP.innerHTML = genereicMessage;
-  elemToDisplay.appendChild(genericP);
+  let header = document.createElement("h4");
+  header.innerHTML = genereicMessage;
+  elemToDisplay.appendChild(header);
 
   let specificP = document.createElement("p");
   specificP.innerHTML = specificMessage;
