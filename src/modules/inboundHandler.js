@@ -277,7 +277,7 @@ export async function generateInboundForecast() {
 }
 
 // Function to delete the inbound forecast
-export function deleteInboundForecast() {
+export async function deleteInboundForecast() {
   const buId = applicationState.userInputs.businessUnit.id;
   const weekStart = applicationState.userInputs.forecastParameters.weekStart;
   const forecastId = applicationConfig.inbound.inboundFcId;
@@ -301,7 +301,7 @@ export function deleteInboundForecast() {
   let delResponse = null;
   try {
     delResponse =
-      wapi.deleteWorkforcemanagementBusinessunitWeekShorttermforecast(
+      await wapi.deleteWorkforcemanagementBusinessunitWeekShorttermforecast(
         buId,
         weekStart,
         forecastId
