@@ -386,7 +386,7 @@ export async function importForecast() {
         unhideElement("import-step-three");
       }
 
-      if (uploadResponse.status === 200) {
+      if (uploadResponse && uploadResponse.status === 200) {
         console.info("[OFG.IMPORT] Forecast upload to URL successful");
 
         const runImport = async () => {
