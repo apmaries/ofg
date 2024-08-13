@@ -592,7 +592,10 @@ function resetPageFour() {
   errorCard.innerHTML = "";
 
   // Reset the loading spinner and message
-  updateLoadingMessage("results-loading-message", "Preparing import file...");
+  updateLoadingMessage(
+    "results-loading-message",
+    "Subscribing to forecast import notifications..."
+  );
   resetLoadingSpinner(
     "import-results-container-new",
     "results-loading-message"

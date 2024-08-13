@@ -320,8 +320,32 @@ export async function importForecast() {
       unhideElement("import-step-three");
       unhideElement("import-step-four-success-icon");
       unhideElement("import-step-four");
+      unhideElement("import-step-five-success-icon");
+      unhideElement("import-step-five");
       unhideElement("import-success-div");
+      document.getElementById("open-forecast-button").disabled = false;
     } else {
+      updateLoadingMessage(
+        "results-loading-message",
+        "Subscribing to forecast import notifications..."
+      );
+      try {
+        const topics = ["shorttermforecasts.import"];
+        const importNotifications = new NotificationHandler(
+          topics,
+          buId,
+          runImport,
+          handleImportNotification
+        );
+        importNotifications.connect();
+        importNotifications.subscribeToNotifications();
+      } catch (notificationError) {
+        displayErrorReason(
+          "Subscribing to notifications failed!",
+          notificationError.message || notificationError
+        );
+      }
+
       updateLoadingMessage(
         "results-loading-message",
         "Preparing import file..."
@@ -413,23 +437,6 @@ export async function importForecast() {
 
           document.getElementById("open-forecast-button").disabled = false;
         };
-
-        try {
-          const topics = ["shorttermforecasts.import"];
-          const importNotifications = new NotificationHandler(
-            topics,
-            buId,
-            runImport,
-            handleImportNotification
-          );
-          importNotifications.connect();
-          importNotifications.subscribeToNotifications();
-        } catch (notificationError) {
-          displayErrorReason(
-            "Subscribing to notifications failed!",
-            notificationError.message || notificationError
-          );
-        }
       } else {
         const reason = uploadResponse.data.reason;
         displayErrorReason("Forecast import failed!", reason);
