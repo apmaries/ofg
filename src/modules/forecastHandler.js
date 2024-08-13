@@ -244,7 +244,8 @@ export async function generateForecast() {
       throw new Error(reason);
     }
   } catch (queryError) {
-    handleFcError(
+    displayErrorReason(
+      "import-fail-div",
       "Error executing historical data queries",
       queryError.message || queryError
     );
@@ -257,7 +258,8 @@ export async function generateForecast() {
     );
     await processQueryResults(queryResults);
   } catch (processingError) {
-    handleFcError(
+    displayErrorReason(
+      "import-fail-div",
       "Error processing query results",
       processingError.message || processingError
     );
@@ -267,7 +269,11 @@ export async function generateForecast() {
     updateLoadingMessage("generate-loading-message", "Preparing forecast");
     await prepareForecast();
   } catch (prepError) {
-    handleFcError("Error preparing forecast", prepError.message || prepError);
+    displayErrorReason(
+      "import-fail-div",
+      "Error preparing forecast",
+      prepError.message || prepError
+    );
   }
 
   if (applicationState.userInputs.forecastOptions.generateInbound) {
@@ -289,7 +295,8 @@ export async function generateForecast() {
       }
       console.info("[OFG.GENERATE] Inbound groups processed");
     } catch (inboundError) {
-      handleFcError(
+      displayErrorReason(
+        "import-fail-div",
         "Error generating inbound forecast",
         inboundError.message || inboundError
       );
