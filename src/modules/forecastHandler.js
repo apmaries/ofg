@@ -329,6 +329,36 @@ export async function importForecast() {
         "results-loading-message",
         "Subscribing to forecast import notifications..."
       );
+
+      // Handle the inbound forecast notification
+      async function handleImportNotification(notification) {
+        console.log("[OFG.IMPORT] Notification received:", notification);
+
+        let importOperationId = applicationConfig.outbound.operationId;
+
+        if (
+          notification.eventBody &&
+          notification.eventBody.operationId === importOperationId
+        ) {
+          const status = notification.eventBody.status;
+          console.log(
+            `[OFG.INBOUND] Generate inbound forecast status updated <${status}>`
+          );
+
+          if (status === "Complete") {
+            applicationConfig.outbound.forecastId =
+              notification.eventBody.result.id;
+            applicationConfig.outbound.selfUri =
+              notification.eventBody.result.selfUri;
+
+            document.getElementById("open-forecast-button").disabled = false;
+            window.dispatchEvent(new CustomEvent("inboundForecastComplete"));
+          } else {
+            window.dispatchEvent(new CustomEvent("inboundForecastError"));
+          }
+        }
+      }
+
       try {
         const topics = ["shorttermforecasts.import"];
         const importNotifications = new NotificationHandler(
@@ -437,12 +467,6 @@ export async function importForecast() {
           } finally {
             unhideElement("import-step-four");
           }
-        };
-
-        const handleImportNotification = (notification) => {
-          console.log("[OFG.IMPORT] Notification received:", notification);
-
-          document.getElementById("open-forecast-button").disabled = false;
         };
       } else {
         const reason = uploadResponse.data.reason;
