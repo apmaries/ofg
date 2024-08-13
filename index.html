@@ -484,7 +484,11 @@
               </gux-loading-message>
             </div>
             <div id="import-success-div" style="display: none">
-              <gux-card-beta>
+              <gux-card-beta
+                id="import-success-card"
+                class="width"
+                style="background-color: #d4edda"
+              >
                 <h4>Forecast imported successfully!</h4>
                 <p>
                   The forecast has been imported successfully. You can now view
@@ -493,7 +497,11 @@
               </gux-card-beta>
             </div>
             <div id="import-fail-div" style="display: none">
-              <gux-card-beta id="import-fail-card"></gux-card-beta>
+              <gux-card-beta
+                id="import-fail-card"
+                class="width"
+                style="background-color: #f8d7da"
+              ></gux-card-beta>
             </div>
             <div id="page-four-buttons" class="row" style="padding-top: 20px">
               <gux-button
