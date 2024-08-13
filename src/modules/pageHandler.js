@@ -580,9 +580,24 @@ function resetPageThree() {
 }
 
 function resetPageFour() {
-  document.getElementById("import-results-container").innerHTML = "";
-  updateLoadingMessage("import-loading-message", "Generating import URL");
-  resetLoadingSpinner("import-results-container", "import-loading-div");
+  // Reset all elements to display: none in the import results container
+  const elementsToReset = document.querySelectorAll(
+    "#import-results-container-new, #import-results-container-new *"
+  );
+  elementsToReset.forEach((element) => {
+    element.style.display = "none";
+  });
+
+  // Clear the error reason card
+  const errorCard = document.getElementById("import-fail-card");
+  errorCard.innerHTML = "";
+
+  // Reset the loading spinner and message
+  updateLoadingMessage("results-loading-message", "Preparing import file...");
+  resetLoadingSpinner(
+    "import-results-container-new",
+    "results-loading-message"
+  );
 }
 
 function cleanUserInputs() {
