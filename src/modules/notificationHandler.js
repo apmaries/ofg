@@ -106,7 +106,7 @@ export class NotificationHandler {
 
     if (topicName !== "channel.metadata") {
       console.log(
-        `[OFG.NOTIFICATIONS] Received notification for topic ${topic}`,
+        `[OFG.NOTIFICATIONS] Received ${topic} notification`,
         notification
       );
       this.onMessage(notification);
