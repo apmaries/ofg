@@ -224,9 +224,8 @@ export async function generateInboundForecast() {
   console.info("[OFG.INBOUND] Initiating inbound forecast generation");
 
   const buId = applicationState.userInputs.businessUnit.id;
-  const weekStart = applicationState.userInputs.forecastParameters.weekStart;
-  const description =
-    applicationState.userInputs.forecastParameters.description;
+  const { weekStart, description } =
+    applicationState.userInputs.forecastParameters;
 
   // Return test data if in test mode
   if (testMode) {
