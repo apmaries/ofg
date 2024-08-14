@@ -518,6 +518,12 @@ async function loadPageThree() {
 
       // Add event listener for open forecast button
       addEvent(document.getElementById("open-forecast-button"), "click", () => {
+        // temp logging
+        console.log(
+          "[OFG.TEMP] Open forecast button clicked",
+          applicationConfig.outbound.fcUrl
+        );
+
         window.open(applicationConfig.outbound.fcUrl, "_blank");
       });
     } catch (error) {
