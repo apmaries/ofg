@@ -348,12 +348,16 @@ export async function importForecast() {
         );
 
         if (status === "Complete") {
-          applicationConfig.outbound.forecastId =
-            notification.eventBody.result.id;
-          applicationConfig.outbound.selfUri =
-            notification.eventBody.result.selfUri;
+          const fcId = notification.eventBody.result.id;
+          // Get region from session storage
+          const region = sessionStorage.getItem("gc_region");
+          const fcUrl = `https://apps.${region}/directory/#/admin/wfm/forecasts/${buId}/update/${weekStart}${fcId}`;
+
+          applicationConfig.outbound.forecastId = fcId;
+          applicationConfig.outbound.fcUrl = fcUrl;
 
           document.getElementById("open-forecast-button").disabled = false;
+          unhideElement("import-step-five-success-icon");
           unhideElement("import-success-div");
         } else if (status === "Error") {
           const errorMessage = notification.metadata.errorInfo.userMessage;

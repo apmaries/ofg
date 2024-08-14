@@ -113,9 +113,6 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     throw bodyError;
   }
 
-  // temp logging
-  console.log("[OFG.TEMP] Forecast import body: ", fcImportBody);
-
   let fcImportGzip;
   let contentLengthBytes;
   try {
@@ -179,9 +176,6 @@ export async function invokeGCF(uploadAttributes, forecastData) {
       header: uploadHeaders,
       data: forecastData,
     };
-
-    // temp logging
-    console.log("[OFG.TEMP] GCF data: ", data);
 
     const response = await fetch(url, {
       method: "POST",

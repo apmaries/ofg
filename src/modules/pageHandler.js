@@ -509,6 +509,17 @@ async function loadPageThree() {
 
     try {
       await importForecast();
+
+      // Hide loading spinner and show page four
+      hideLoadingSpinner(
+        "import-results-container-new",
+        "results-loading-message"
+      );
+
+      // Add event listener for open forecast button
+      addEvent(document.getElementById("open-forecast-button"), "click", () => {
+        window.open(applicationConfig.outbound.selfUri, "_blank");
+      });
     } catch (error) {
       console.error("[OFG.UI] Forecast import failed");
     }
@@ -538,14 +549,6 @@ async function loadPageThree() {
 // Function to load page four
 async function loadPageFour() {
   console.info("[OFG.UI] Loading page four");
-
-  // Hide loading spinner and show page four
-  hideLoadingSpinner("import-results-container-new", "results-loading-message");
-
-  // Add event listener for open forecast button
-  addEvent(document.getElementById("open-forecast-button"), "click", () => {
-    window.open(applicationState.forecastOutputs.forecastImportUrl, "_blank");
-  });
 
   // Add event listener for reset button
   addEvent(document.getElementById("restart-button"), "click", async () => {
