@@ -524,7 +524,27 @@ async function loadPageThree() {
           applicationConfig.outbound.fcUrl
         );
 
-        window.open(applicationConfig.outbound.fcUrl, "_blank");
+        try {
+          const newWindow = window.open(
+            applicationConfig.outbound.fcUrl,
+            "_blank"
+          );
+          if (!newWindow) {
+            throw new Error(
+              "Failed to open new window. It might be blocked by a pop-up blocker."
+            );
+          }
+        } catch (error) {
+          console.error("[OFG] An error occurred:", error);
+          errorManager.logError({
+            Source:
+              "https://apmaries.github.io/sandpit-testing/src/modules/pageHandler.js",
+            Line: 527,
+            Column: 0,
+            URL: "https://apmaries.github.io/sandpit-testing/index.html",
+            ErrorObject: error,
+          });
+        }
       });
     } catch (error) {
       console.error("[OFG.UI] Forecast import failed");
