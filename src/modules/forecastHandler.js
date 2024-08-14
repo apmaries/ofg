@@ -356,13 +356,9 @@ export async function importForecast() {
           document.getElementById("open-forecast-button").disabled = false;
           unhideElement("import-success-div");
         } else if (status === "Error") {
-          const errorCode = notification.metadata.errorInfo.errorCode;
           const errorMessage = notification.metadata.errorInfo.userMessage;
-
-          displayErrorCard(
-            "Forecast import failed!",
-            `Error code: ${errorCode}\nMessage: ${errorMessage}`
-          );
+          unhideElement("import-step-five-fail-icon");
+          displayErrorCard("Forecast import failed!", errorMessage);
         }
       }
     }

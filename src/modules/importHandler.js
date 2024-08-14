@@ -113,6 +113,9 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     throw bodyError;
   }
 
+  // temp logging
+  console.debug("[OFG.IMPORT] Forecast import body: ", fcImportBody);
+
   let fcImportGzip;
   let contentLengthBytes;
   try {
