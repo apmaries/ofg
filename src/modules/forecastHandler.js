@@ -392,6 +392,9 @@ export async function importForecast() {
         );
       }
 
+      // temp logging
+      console.log("[OFG.TEMP] URL response:", urlResponse);
+
       // STEP FOUR - UPLOAD FILE
       unhideElement("import-step-four");
       let uploadResponse;
