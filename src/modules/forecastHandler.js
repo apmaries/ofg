@@ -324,62 +324,44 @@ export async function importForecast() {
       unhideElement("import-step-five");
       unhideElement("import-success-div");
       document.getElementById("open-forecast-button").disabled = false;
-    } else {
-      updateLoadingMessage(
-        "results-loading-message",
-        "Subscribing to forecast import notifications..."
-      );
+      return;
+    }
 
-      // Handle the inbound forecast notification
-      async function handleImportNotification(notification) {
-        console.log("[OFG.IMPORT] Notification received:", notification);
+    // Handle the inbound forecast notification
+    async function handleImportNotification(notification) {
+      console.log("[OFG.IMPORT] Notification received:", notification);
 
-        let importOperationId = applicationConfig.outbound.operationId;
+      let importOperationId = applicationConfig.outbound.operationId;
 
-        if (
-          notification.eventBody &&
-          notification.eventBody.operationId === importOperationId
-        ) {
-          const status = notification.eventBody.status;
-          console.log(
-            `[OFG.INBOUND] Generate inbound forecast status updated <${status}>`
-          );
+      if (
+        notification.eventBody &&
+        notification.eventBody.operationId === importOperationId
+      ) {
+        const status = notification.eventBody.status;
+        console.log(
+          `[OFG.INBOUND] Generate inbound forecast status updated <${status}>`
+        );
 
-          if (status === "Complete") {
-            applicationConfig.outbound.forecastId =
-              notification.eventBody.result.id;
-            applicationConfig.outbound.selfUri =
-              notification.eventBody.result.selfUri;
+        if (status === "Complete") {
+          applicationConfig.outbound.forecastId =
+            notification.eventBody.result.id;
+          applicationConfig.outbound.selfUri =
+            notification.eventBody.result.selfUri;
 
-            document.getElementById("open-forecast-button").disabled = false;
-            window.dispatchEvent(new CustomEvent("inboundForecastComplete"));
-          } else {
-            window.dispatchEvent(new CustomEvent("inboundForecastError"));
-          }
+          document.getElementById("open-forecast-button").disabled = false;
+          window.dispatchEvent(new CustomEvent("inboundForecastComplete"));
+        } else {
+          window.dispatchEvent(new CustomEvent("inboundForecastError"));
         }
       }
+    }
 
-      try {
-        const topics = ["shorttermforecasts.import"];
-        const importNotifications = new NotificationHandler(
-          topics,
-          buId,
-          runImport,
-          handleImportNotification
-        );
-        importNotifications.connect();
-        importNotifications.subscribeToNotifications();
-      } catch (notificationError) {
-        displayErrorReason(
-          "Subscribing to notifications failed!",
-          notificationError.message || notificationError
-        );
-      }
+    // Run the import operation
+    async function runImport() {
+      updateLoadingMessage("import-loading-message", "Importing forecast...");
 
-      updateLoadingMessage(
-        "results-loading-message",
-        "Preparing import file..."
-      );
+      // STEP TWO - PREP FC IMPORT BODY
+      unhideElement("import-step-two");
       let fcImportBody, importGzip, contentLength;
       try {
         [fcImportBody, importGzip, contentLength] = await prepFcImportBody(
@@ -387,92 +369,89 @@ export async function importForecast() {
           startDayOfWeek,
           description
         );
-        unhideElement("import-step-one-success-icon");
-      } catch (prepError) {
-        unhideElement("import-step-one-fail-icon");
-        displayErrorReason(
-          "Import file preparation failed!",
-          prepError.message || prepError
-        );
-      } finally {
-        unhideElement("import-step-one");
-      }
-
-      let fcImportUrl;
-      try {
-        updateLoadingMessage(
-          "results-loading-message",
-          "Generating upload URL..."
-        );
-        fcImportUrl = await generateUrl(buId, weekStart, contentLength);
         unhideElement("import-step-two-success-icon");
-      } catch (urlError) {
+      } catch (prepError) {
         unhideElement("import-step-two-fail-icon");
         displayErrorReason(
-          "Upload URL generation failed!",
-          urlError.message || urlError
+          "Forecast import file preparation failed!",
+          prepError.message || prepError
         );
-      } finally {
-        unhideElement("import-step-two");
       }
 
+      // STEP THREE - GENERATE URL
+      unhideElement("import-step-three");
+      let fcImportUrl;
+      try {
+        fcImportUrl = await generateUrl(buId, weekStart, contentLength);
+        unhideElement("import-step-three-success-icon");
+      } catch (urlError) {
+        unhideElement("import-step-three-fail-icon");
+        displayErrorReason(
+          "Forecast import URL generation failed!",
+          urlError.message || urlError
+        );
+      }
+
+      // STEP FOUR - UPLOAD FILE
+      unhideElement("import-step-four");
       let uploadResponse;
       try {
-        updateLoadingMessage(
-          "results-loading-message",
-          "Uploading import file..."
-        );
         uploadResponse = await invokeGCF(
           fcImportUrl,
           importGzip,
           contentLength
         );
-        unhideElement("import-step-three-success-icon");
+        unhideElement("import-step-four-success-icon");
       } catch (uploadError) {
-        console.warn(uploadError);
-        console.warn(uploadError.message);
-        unhideElement("import-step-three-fail-icon");
+        unhideElement("import-step-four-fail-icon");
         displayErrorReason(
-          "Import file upload failed!",
+          "Forecast import file upload failed!",
           uploadError.message || uploadError
         );
-      } finally {
-        unhideElement("import-step-three");
       }
 
-      // temp logging
-      console.log(
-        "[OFG.TEMP] uploadResponse = ",
-        uploadResponse,
-        uploadResponse.status
-      );
-
-      if (uploadResponse && uploadResponse.status === 200) {
-        console.info("[OFG.IMPORT] Forecast upload to URL successful");
-
-        const runImport = async () => {
-          updateLoadingMessage(
-            "import-loading-message",
-            "Importing forecast..."
-          );
-          try {
-            await importFc(buId, weekStart);
-            unhideElement("import-step-four-success-icon");
-          } catch (runImportError) {
-            unhideElement("import-step-four-fail-icon");
-            displayErrorReason(
-              "Forecast import failed!",
-              runImportError.message || runImportError
-            );
-          } finally {
-            unhideElement("import-step-four");
-          }
-        };
-      } else {
-        const reason = uploadResponse.data.reason;
-        displayErrorReason("Forecast import failed!", reason);
+      // STEP FIVE - IMPORT FC
+      unhideElement("import-step-five");
+      try {
+        await importFc(buId, weekStart);
+        unhideElement("import-step-five-success-icon");
+      } catch (runImportError) {
+        unhideElement("import-step-five-fail-icon");
+        displayErrorReason(
+          "Forecast import failed!",
+          runImportError.message || runImportError
+        );
       }
     }
+
+    // Subscribe to the import notification
+    async function subscribe() {
+      unhideElement("import-step-one");
+      try {
+        const topics = ["shorttermforecasts.import"];
+        const importNotifications = new NotificationHandler(
+          topics,
+          buId,
+          runImport, // Execute the import operation on successful subscription
+          handleImportNotification // Handle import notification
+        );
+        importNotifications.connect();
+        importNotifications.subscribeToNotifications();
+        unhideElement("import-step-one-success-icon");
+      } catch (notificationError) {
+        displayErrorReason(
+          "Subscribing to notifications failed!",
+          notificationError.message || notificationError
+        );
+        unhideElement("import-step-one-fail-icon");
+      }
+    }
+
+    updateLoadingMessage(
+      "results-loading-message",
+      "Subscribing to forecast import notifications..."
+    );
+    await subscribe();
   } catch (error) {
     console.error("[OFG.IMPORT] Forecast import failed:", error);
   }
