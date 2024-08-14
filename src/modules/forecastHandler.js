@@ -30,7 +30,7 @@ import { NotificationHandler } from "./notificationHandler.js";
 
 // Utility modules
 import {
-  displayErrorReason,
+  displayErrorCard,
   unhideElement,
   updateLoadingMessage,
 } from "../utils/domUtils.js";
@@ -244,7 +244,7 @@ export async function generateForecast() {
       throw new Error(reason);
     }
   } catch (queryError) {
-    displayErrorReason(
+    displayErrorCard(
       "Error executing historical data queries",
       queryError.message || queryError
     );
@@ -257,7 +257,7 @@ export async function generateForecast() {
     );
     await processQueryResults(queryResults);
   } catch (processingError) {
-    displayErrorReason(
+    displayErrorCard(
       "Error processing query results",
       processingError.message || processingError
     );
@@ -267,7 +267,7 @@ export async function generateForecast() {
     updateLoadingMessage("generate-loading-message", "Preparing forecast");
     await prepareForecast();
   } catch (prepError) {
-    displayErrorReason(
+    displayErrorCard(
       "Error preparing forecast",
       prepError.message || prepError
     );
@@ -292,7 +292,7 @@ export async function generateForecast() {
       }
       console.info("[OFG.GENERATE] Inbound groups processed");
     } catch (inboundError) {
-      displayErrorReason(
+      displayErrorCard(
         "Error generating inbound forecast",
         inboundError.message || inboundError
       );
@@ -354,9 +354,15 @@ export async function importForecast() {
             notification.eventBody.result.selfUri;
 
           document.getElementById("open-forecast-button").disabled = false;
-          window.dispatchEvent(new CustomEvent("inboundForecastComplete"));
-        } else {
-          window.dispatchEvent(new CustomEvent("inboundForecastError"));
+          unhideElement("import-success-div");
+        } else if (status === "Error") {
+          const errorCode = notification.metadata.errorInfo.errorCode;
+          const errorMessage = notification.metadata.errorInfo.userMessage;
+
+          displayErrorCard(
+            "Forecast import failed!",
+            `Error code: ${errorCode}\nMessage: ${errorMessage}`
+          );
         }
       }
     }
@@ -377,7 +383,7 @@ export async function importForecast() {
         unhideElement("import-step-two-success-icon");
       } catch (prepError) {
         unhideElement("import-step-two-fail-icon");
-        displayErrorReason(
+        displayErrorCard(
           "Forecast import file preparation failed!",
           prepError.message || prepError
         );
@@ -391,7 +397,7 @@ export async function importForecast() {
         unhideElement("import-step-three-success-icon");
       } catch (urlError) {
         unhideElement("import-step-three-fail-icon");
-        displayErrorReason(
+        displayErrorCard(
           "Forecast import URL generation failed!",
           urlError.message || urlError
         );
@@ -409,7 +415,7 @@ export async function importForecast() {
         unhideElement("import-step-four-success-icon");
       } catch (uploadError) {
         unhideElement("import-step-four-fail-icon");
-        displayErrorReason(
+        displayErrorCard(
           "Forecast import file upload failed!",
           uploadError.message || uploadError
         );
@@ -421,7 +427,7 @@ export async function importForecast() {
         await importFc(buId, weekStart, urlResponse.uploadKey);
       } catch (runImportError) {
         unhideElement("import-step-five-fail-icon");
-        displayErrorReason(
+        displayErrorCard(
           "Forecast import failed!",
           runImportError.message || runImportError
         );
@@ -443,7 +449,7 @@ export async function importForecast() {
         importNotifications.subscribeToNotifications();
         unhideElement("import-step-one-success-icon");
       } catch (notificationError) {
-        displayErrorReason(
+        displayErrorCard(
           "Subscribing to notifications failed!",
           notificationError.message || notificationError
         );
