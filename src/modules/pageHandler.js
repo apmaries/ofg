@@ -587,10 +587,6 @@ function resetPageFour() {
     element.style.display = "none";
   });
 
-  // Clear the error reason card
-  const errorCard = document.getElementById("import-fail-card");
-  errorCard.innerHTML = "";
-
   // Reset the loading spinner and message
   updateLoadingMessage(
     "results-loading-message",

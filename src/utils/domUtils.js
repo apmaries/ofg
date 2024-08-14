@@ -258,6 +258,9 @@ export function displayErrorCard(genereicMessage, specificMessage) {
   const errorDiv = document.getElementById("import-fail-div");
   const errorCard = document.getElementById("import-fail-card");
 
+  // Clear the error card element from previous messages
+  errorCard.innerHTML = "";
+
   // Append a p tag with the message
   let header = document.createElement("h4");
   header.innerHTML = genereicMessage;
