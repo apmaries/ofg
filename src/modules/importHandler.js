@@ -180,6 +180,9 @@ export async function invokeGCF(uploadAttributes, forecastData) {
       data: forecastData,
     };
 
+    // temp logging
+    console.log("[OFG.TEMP] GCF data: ", data);
+
     const response = await fetch(url, {
       method: "POST",
       headers: {

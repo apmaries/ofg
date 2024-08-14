@@ -405,7 +405,7 @@ export async function importForecast() {
       try {
         uploadResponse = await invokeGCF(
           urlResponse,
-          importGzip,
+          fcImportBody,
           contentLength
         );
         unhideElement("import-step-four-success-icon");
