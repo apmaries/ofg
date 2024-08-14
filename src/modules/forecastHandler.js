@@ -329,7 +329,12 @@ export async function importForecast() {
 
     // Handle the inbound forecast notification
     async function handleImportNotification(notification) {
-      console.log("[OFG.IMPORT] Notification received:", notification);
+      // Check if "shorttermforecasts.generate" notification
+      if (!notification.topicName.includes("shorttermforecasts.import")) {
+        return;
+      }
+
+      console.log("[OFG.IMPORT] Processing result from notification");
 
       let importOperationId = applicationConfig.outbound.operationId;
 
@@ -392,9 +397,6 @@ export async function importForecast() {
         );
       }
 
-      // temp logging
-      console.log("[OFG.TEMP] URL response:", urlResponse);
-
       // STEP FOUR - UPLOAD FILE
       unhideElement("import-step-four");
       let uploadResponse;
@@ -417,7 +419,6 @@ export async function importForecast() {
       unhideElement("import-step-five");
       try {
         await importFc(buId, weekStart, urlResponse.uploadKey);
-        unhideElement("import-step-five-success-icon");
       } catch (runImportError) {
         unhideElement("import-step-five-fail-icon");
         displayErrorReason(

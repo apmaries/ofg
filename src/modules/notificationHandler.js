@@ -101,9 +101,13 @@ export class NotificationHandler {
     const notification = JSON.parse(event.data);
     const topicName = notification.topicName;
 
+    // Split topic name by periods and get the last element
+    const topic = topicName.split(".").pop();
+
     if (topicName !== "channel.metadata") {
       console.log(
-        `[OFG.NOTIFICATIONS] Received notification for topic ${topicName}`
+        `[OFG.NOTIFICATIONS] Received notification for topic ${topic}`,
+        notification
       );
       this.onMessage(notification);
     }
