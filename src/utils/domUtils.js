@@ -254,7 +254,7 @@ export async function unhideElement(elementId) {
   element.style.display = "block";
 }
 
-export function displayErrorReason(genereicMessage, specificMessage) {
+export function displayErrorCard(genereicMessage, specificMessage) {
   const errorDiv = document.getElementById("import-fail-div");
   const errorCard = document.getElementById("import-fail-card");
 
