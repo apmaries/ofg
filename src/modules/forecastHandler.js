@@ -423,8 +423,23 @@ export async function importForecast() {
 
       // STEP FIVE - IMPORT FC
       unhideElement("import-step-five");
+      let importResponse;
       try {
-        await importFc(buId, weekStart, urlResponse.uploadKey);
+        importResponse = await importFc(buId, weekStart, urlResponse.uploadKey);
+
+        if (importResponse.status === "Complete") {
+          // Synchronous handling if the forecast is already complete
+          console.log("[OFG.IMPORT] Forecast import complete!");
+          applicationConfig.outbound.forecastId = importResponse.result.id;
+
+          unhideElement("import-step-five-success-icon");
+          unhideElement("import-success-div");
+        } else if (importResponse.status === "Processing") {
+          // Asynchronous handling if the forecast is still processing
+          console.log("[OFG.IMPORT] Forecast import processing...");
+          applicationConfig.outbound.operationId = importResponse.operationId;
+          // Further operations handled via notification in handleImportNotification()
+        }
       } catch (runImportError) {
         unhideElement("import-step-five-fail-icon");
         displayErrorCard(
