@@ -380,9 +380,9 @@ export async function importForecast() {
 
       // STEP THREE - GENERATE URL
       unhideElement("import-step-three");
-      let fcImportUrl;
+      let urlResponse;
       try {
-        fcImportUrl = await generateUrl(buId, weekStart, contentLength);
+        urlResponse = await generateUrl(buId, weekStart, contentLength);
         unhideElement("import-step-three-success-icon");
       } catch (urlError) {
         unhideElement("import-step-three-fail-icon");
@@ -397,7 +397,7 @@ export async function importForecast() {
       let uploadResponse;
       try {
         uploadResponse = await invokeGCF(
-          fcImportUrl,
+          urlResponse,
           importGzip,
           contentLength
         );
@@ -413,7 +413,7 @@ export async function importForecast() {
       // STEP FIVE - IMPORT FC
       unhideElement("import-step-five");
       try {
-        await importFc(buId, weekStart);
+        await importFc(buId, weekStart, urlResponse.uploadKey);
         unhideElement("import-step-five-success-icon");
       } catch (runImportError) {
         unhideElement("import-step-five-fail-icon");
