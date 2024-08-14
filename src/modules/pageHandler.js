@@ -518,7 +518,7 @@ async function loadPageThree() {
 
       // Add event listener for open forecast button
       addEvent(document.getElementById("open-forecast-button"), "click", () => {
-        window.open(applicationConfig.outbound.selfUri, "_blank");
+        window.open(applicationConfig.outbound.fcUrl, "_blank");
       });
     } catch (error) {
       console.error("[OFG.UI] Forecast import failed");

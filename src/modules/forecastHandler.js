@@ -351,6 +351,8 @@ export async function importForecast() {
           const fcId = notification.eventBody.result.id;
           // Get region from session storage
           const region = sessionStorage.getItem("gc_region");
+
+          // Build the forecast URL
           const fcUrl = `https://apps.${region}/directory/#/admin/wfm/forecasts/${buId}/update/${weekStart}${fcId}`;
 
           applicationConfig.outbound.forecastId = fcId;
