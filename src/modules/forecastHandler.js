@@ -286,6 +286,13 @@ export async function generateForecast() {
       }
     });
 
+    // Listen for the custom event and delete the inbound forecast if needed
+    window.addEventListener("inboundForecastComplete", (event) => {
+      if (!event.detail.retainInbound) {
+        deleteInboundForecast();
+      }
+    });
+
     try {
       await generateInboundForecast();
 
@@ -305,13 +312,6 @@ export async function generateForecast() {
         inboundError.message || inboundError
       );
     }
-
-    // Listen for the custom event and delete the inbound forecast if needed
-    window.addEventListener("inboundForecastComplete", (event) => {
-      if (!event.detail.retainInbound) {
-        deleteInboundForecast();
-      }
-    });
   }
 }
 
