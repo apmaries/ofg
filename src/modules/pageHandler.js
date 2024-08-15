@@ -10,7 +10,11 @@ import { applicationConfig } from "../core/configManager.js";
 import { applicationState } from "../core/stateManager.js";
 
 // App modules
-import { generateForecast, importForecast } from "./forecastHandler.js";
+import {
+  generateForecast,
+  handleInboundForecastComplete,
+  importForecast,
+} from "./forecastHandler.js";
 import {
   getSelectedPgForecastData,
   populateGraphAndTable,
@@ -582,6 +586,10 @@ async function loadPageFour() {
     removeEventListeners(
       document.getElementById("open-forecast-button"),
       "click"
+    );
+    window.removeEventListener(
+      "inboundForecastComplete",
+      handleInboundForecastComplete
     );
   });
 

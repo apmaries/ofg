@@ -287,11 +287,10 @@ export async function generateForecast() {
     });
 
     // Listen for the custom event and delete the inbound forecast if needed
-    window.addEventListener("inboundForecastComplete", (event) => {
-      if (!event.detail.retainInbound) {
-        deleteInboundForecast();
-      }
-    });
+    window.addEventListener(
+      "inboundForecastComplete",
+      handleInboundForecastComplete
+    );
 
     try {
       await generateInboundForecast();
@@ -500,4 +499,10 @@ export async function importForecast() {
 
 export function initializeApp() {
   console.log("[APP] Application initialized");
+}
+
+export function handleInboundForecastComplete(event) {
+  if (!event.detail.retainInbound) {
+    deleteInboundForecast();
+  }
 }
