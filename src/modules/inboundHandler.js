@@ -343,6 +343,13 @@ export async function deleteInboundForecast() {
     return;
   }
 
+  // temp logging
+  console.log(
+    "[OFG.TEMP] Inbound forecast deletion response: ",
+    delResponse,
+    delResponse.status
+  );
+
   // Validate response status code
   if (delResponse.status !== 204) {
     console.error(
