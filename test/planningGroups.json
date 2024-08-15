@@ -1,0 +1,93 @@
+{
+  "entities": [
+    {
+      "id": "1b2d045a-b2d4-4f72-926f-ae833cba51ec",
+      "name": "amOutboundPG1",
+      "serviceGoalTemplate": {
+        "id": "b2aa2c32-f75b-4afc-bd29-b787a13e4409",
+        "selfUri": "/api/v2/workforcemanagement/businessunits/595eb389-e150-4492-8825-b764cc9d9bfe/servicegoaltemplates/b2aa2c32-f75b-4afc-bd29-b787a13e4409"
+      },
+      "routePaths": [
+        {
+          "queue": {
+            "id": "a4803ad5-ef25-4bfc-8382-7f7e36a86404",
+            "selfUri": "/api/v2/routing/queues/a4803ad5-ef25-4bfc-8382-7f7e36a86404"
+          },
+          "mediaType": "Voice",
+          "skills": []
+        }
+      ],
+      "metadata": {
+        "version": 1,
+        "modifiedBy": {
+          "id": "be1c20dd-f6a5-457e-bba4-aaabe81e1ceb",
+          "selfUri": "/api/v2/users/be1c20dd-f6a5-457e-bba4-aaabe81e1ceb"
+        },
+        "dateModified": "2024-01-31T05:33:51.104Z"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/595eb389-e150-4492-8825-b764cc9d9bfe/planninggroups/cd3ec74a-074a-4b0b-9155-981a867632d0"
+    },
+    {
+      "id": "96361ea5-13eb-45de-8262-b5667c9a43f4",
+      "name": "Not Outbound",
+      "serviceGoalTemplate": {
+        "id": "782fa3ce-09f6-4d09-a3a4-d72abca3c323",
+        "selfUri": "/api/v2/workforcemanagement/businessunits/595eb389-e150-4492-8825-b764cc9d9bfe/servicegoaltemplates/782fa3ce-09f6-4d09-a3a4-d72abca3c323"
+      },
+      "routePaths": [
+        {
+          "queue": {
+            "id": "bfacdae5-64cb-4919-b1bc-6c1e64f6bbc2",
+            "selfUri": "/api/v2/routing/queues/bfacdae5-64cb-4919-b1bc-6c1e64f6bbc2"
+          },
+          "mediaType": "Voice",
+          "skills": []
+        }
+      ],
+      "metadata": {
+        "version": 1,
+        "modifiedBy": {
+          "id": "be1c20dd-f6a5-457e-bba4-aaabe81e1ceb",
+          "selfUri": "/api/v2/users/be1c20dd-f6a5-457e-bba4-aaabe81e1ceb"
+        },
+        "dateModified": "2024-02-14T10:11:36.847Z"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/595eb389-e150-4492-8825-b764cc9d9bfe/planninggroups/62c3070e-5f48-4a46-9ac1-1c27d7edee46"
+    },
+    {
+      "id": "54ced4e7-0c19-496a-8c58-d09d4e9125f6",
+      "name": "amOutboundPG2",
+      "serviceGoalTemplate": {
+        "id": "b2aa2c32-f75b-4afc-bd29-b787a13e4409",
+        "selfUri": "/api/v2/workforcemanagement/businessunits/595eb389-e150-4492-8825-b764cc9d9bfe/servicegoaltemplates/b2aa2c32-f75b-4afc-bd29-b787a13e4409"
+      },
+      "routePaths": [
+        {
+          "queue": {
+            "id": "d9cc1f44-70b5-40af-b56a-076f72e3578a",
+            "selfUri": "/api/v2/routing/queues/d9cc1f44-70b5-40af-b56a-076f72e3578a"
+          },
+          "mediaType": "Voice",
+          "skills": []
+        }
+      ],
+      "metadata": {
+        "version": 1,
+        "modifiedBy": {
+          "id": "be1c20dd-f6a5-457e-bba4-aaabe81e1ceb",
+          "selfUri": "/api/v2/users/be1c20dd-f6a5-457e-bba4-aaabe81e1ceb"
+        },
+        "dateModified": "2024-01-31T05:34:08.652Z"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/595eb389-e150-4492-8825-b764cc9d9bfe/planninggroups/72554252-55d2-4f3f-a21b-930d3c934a6c"
+    }
+  ],
+  "metadata": {
+    "version": 3,
+    "modifiedBy": {
+      "id": "be1c20dd-f6a5-457e-bba4-aaabe81e1ceb",
+      "selfUri": "/api/v2/users/be1c20dd-f6a5-457e-bba4-aaabe81e1ceb"
+    },
+    "dateModified": "2024-02-14T10:11:36.847Z"
+  }
+}

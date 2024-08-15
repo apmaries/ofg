@@ -1,0 +1,231 @@
+{
+  "entities": [
+    {
+      "id": "090aeefb-033d-4123-8d1b-2d7e3d87c99e",
+      "name": "AM_OB",
+      "dateCreated": "2021-11-30T23:52:36.683Z",
+      "dateModified": "2022-12-19T14:14:25.332Z",
+      "version": 11,
+      "contactList": {
+        "id": "232ac65b-ed62-4614-8114-05266a0f886a",
+        "name": "AM_OB_List",
+        "selfUri": "/api/v2/outbound/contactlists/232ac65b-ed62-4614-8114-05266a0f886a"
+      },
+      "queue": {
+        "id": "85e5372e-e623-4423-9913-3cda355b40b3",
+        "name": "bluthSales",
+        "selfUri": "/api/v2/routing/queues/85e5372e-e623-4423-9913-3cda355b40b3"
+      },
+      "dialingMode": "preview",
+      "script": {
+        "id": "476c2b71-7429-11e4-9a5b-3f91746bffa3",
+        "name": "Default Outbound Script",
+        "selfUri": "/api/v2/scripts/476c2b71-7429-11e4-9a5b-3f91746bffa3"
+      },
+      "campaignStatus": "off",
+      "phoneColumns": [
+        {
+          "columnName": "PhoneNumber",
+          "type": "Cell"
+        }
+      ],
+      "abandonRate": 5,
+      "dncLists": [],
+      "callerName": "Bluth Co. Sales",
+      "callerAddress": "+61466357282",
+      "outboundLineCount": 0,
+      "ruleSets": [],
+      "skipPreviewDisabled": false,
+      "previewTimeOutSeconds": 0,
+      "singleNumberPreview": false,
+      "alwaysRunning": false,
+      "noAnswerTimeout": 30,
+      "priority": 5,
+      "contactListFilters": [],
+      "division": {
+        "id": "1c328efb-fcf3-4ac3-b5c2-987ff3c92afa",
+        "name": "Bluth Company",
+        "selfUri": "/api/v2/authorization/divisions/1c328efb-fcf3-4ac3-b5c2-987ff3c92afa"
+      },
+      "dynamicContactQueueingSettings": {
+        "sort": false
+      },
+      "callbackAutoAnswer": false,
+      "selfUri": "/api/v2/outbound/campaigns/090aeefb-033d-4123-8d1b-2d7e3d87c99e"
+    },
+    {
+      "id": "5e7b4fd4-8377-436b-a7f6-0b72f498fbc1",
+      "name": "amOB1",
+      "dateCreated": "2024-01-31T05:32:15.620Z",
+      "version": 1,
+      "contactList": {
+        "id": "d8910e75-f8c9-40cb-9bae-27fbbdb51d42",
+        "name": "amOB1",
+        "selfUri": "/api/v2/outbound/contactlists/d8910e75-f8c9-40cb-9bae-27fbbdb51d42"
+      },
+      "queue": {
+        "id": "a4803ad5-ef25-4bfc-8382-7f7e36a86404",
+        "name": "amOB1",
+        "selfUri": "/api/v2/routing/queues/a4803ad5-ef25-4bfc-8382-7f7e36a86404"
+      },
+      "dialingMode": "preview",
+      "script": {
+        "id": "476c2b71-7429-11e4-9a5b-3f91746bffa3",
+        "name": "Default Outbound Script",
+        "selfUri": "/api/v2/scripts/476c2b71-7429-11e4-9a5b-3f91746bffa3"
+      },
+      "campaignStatus": "off",
+      "phoneColumns": [
+        {
+          "columnName": "PhoneNumber",
+          "type": "Daytime"
+        }
+      ],
+      "abandonRate": 5,
+      "dncLists": [],
+      "callerName": "amOB",
+      "callerAddress": "+61413361963",
+      "outboundLineCount": 0,
+      "ruleSets": [],
+      "skipPreviewDisabled": false,
+      "previewTimeOutSeconds": 0,
+      "singleNumberPreview": false,
+      "alwaysRunning": false,
+      "noAnswerTimeout": 30,
+      "priority": 5,
+      "contactListFilters": [],
+      "division": {
+        "id": "bf040bf2-9821-4fdd-a8b6-2a1a112a4d03",
+        "name": "amOB",
+        "selfUri": "/api/v2/authorization/divisions/bf040bf2-9821-4fdd-a8b6-2a1a112a4d03"
+      },
+      "dynamicContactQueueingSettings": {
+        "sort": false
+      },
+      "callbackAutoAnswer": false,
+      "selfUri": "/api/v2/outbound/campaigns/5e7b4fd4-8377-436b-a7f6-0b72f498fbc1"
+    },
+    {
+      "id": "958c03c1-24a6-49ff-ba32-5824237deabe",
+      "name": "amOB2",
+      "dateCreated": "2024-01-31T05:32:50.307Z",
+      "version": 1,
+      "contactList": {
+        "id": "cb57b64a-a9ce-4d72-8554-2aa2730e5f0e",
+        "name": "amOB2",
+        "selfUri": "/api/v2/outbound/contactlists/cb57b64a-a9ce-4d72-8554-2aa2730e5f0e"
+      },
+      "queue": {
+        "id": "d9cc1f44-70b5-40af-b56a-076f72e3578a",
+        "name": "amOB2",
+        "selfUri": "/api/v2/routing/queues/d9cc1f44-70b5-40af-b56a-076f72e3578a"
+      },
+      "dialingMode": "preview",
+      "script": {
+        "id": "476c2b71-7429-11e4-9a5b-3f91746bffa3",
+        "name": "Default Outbound Script",
+        "selfUri": "/api/v2/scripts/476c2b71-7429-11e4-9a5b-3f91746bffa3"
+      },
+      "campaignStatus": "off",
+      "phoneColumns": [
+        {
+          "columnName": "PhoneNumber",
+          "type": "Daytime"
+        }
+      ],
+      "abandonRate": 5,
+      "dncLists": [],
+      "callerName": "amOB",
+      "callerAddress": "+61413361963",
+      "outboundLineCount": 0,
+      "ruleSets": [],
+      "skipPreviewDisabled": false,
+      "previewTimeOutSeconds": 0,
+      "singleNumberPreview": false,
+      "alwaysRunning": false,
+      "noAnswerTimeout": 30,
+      "priority": 5,
+      "contactListFilters": [],
+      "division": {
+        "id": "bf040bf2-9821-4fdd-a8b6-2a1a112a4d03",
+        "name": "amOB",
+        "selfUri": "/api/v2/authorization/divisions/bf040bf2-9821-4fdd-a8b6-2a1a112a4d03"
+      },
+      "dynamicContactQueueingSettings": {
+        "sort": false
+      },
+      "callbackAutoAnswer": false,
+      "selfUri": "/api/v2/outbound/campaigns/958c03c1-24a6-49ff-ba32-5824237deabe"
+    },
+    {
+      "id": "f07f914d-40b7-45b8-9b8c-77572b6a8ac7",
+      "name": "KH_OB_Campaign",
+      "dateCreated": "2021-06-01T03:41:12.059Z",
+      "dateModified": "2022-08-02T10:55:23.073Z",
+      "version": 10,
+      "contactList": {
+        "id": "f678496d-4462-4ea1-a2d2-a71a4d251032",
+        "name": "KH_Ob_Campaign",
+        "selfUri": "/api/v2/outbound/contactlists/f678496d-4462-4ea1-a2d2-a71a4d251032"
+      },
+      "queue": {
+        "id": "7d9ddc11-3562-4618-9a3d-21febfe15eab",
+        "name": "KH_Queue1",
+        "selfUri": "/api/v2/routing/queues/7d9ddc11-3562-4618-9a3d-21febfe15eab"
+      },
+      "dialingMode": "progressive",
+      "script": {
+        "id": "476c2b71-7429-11e4-9a5b-3f91746bffa3",
+        "name": "Default Outbound Script",
+        "selfUri": "/api/v2/scripts/476c2b71-7429-11e4-9a5b-3f91746bffa3"
+      },
+      "site": {
+        "id": "83ded4dd-981e-43c5-8ea0-e02025a970a4",
+        "name": "Melbourne South Yarra",
+        "selfUri": "/api/v2/telephony/providers/edges/sites/83ded4dd-981e-43c5-8ea0-e02025a970a4"
+      },
+      "campaignStatus": "complete",
+      "phoneColumns": [
+        {
+          "columnName": "PhoneNumber",
+          "type": "Cell"
+        }
+      ],
+      "abandonRate": 5,
+      "dncLists": [],
+      "callAnalysisResponseSet": {
+        "id": "ca119a46-9ff4-4045-ba4d-56aadf17c36c",
+        "name": "Default Response Set",
+        "selfUri": "/api/v2/outbound/callanalysisresponsesets/ca119a46-9ff4-4045-ba4d-56aadf17c36c"
+      },
+      "callerName": "+61380800242",
+      "callerAddress": "+61380800242",
+      "outboundLineCount": 1,
+      "ruleSets": [],
+      "skipPreviewDisabled": false,
+      "previewTimeOutSeconds": 0,
+      "singleNumberPreview": false,
+      "alwaysRunning": false,
+      "noAnswerTimeout": 30,
+      "priority": 5,
+      "contactListFilters": [],
+      "division": {
+        "id": "877586eb-934f-47bf-84d4-03136c3c1b8e",
+        "name": "KH_Division",
+        "selfUri": "/api/v2/authorization/divisions/877586eb-934f-47bf-84d4-03136c3c1b8e"
+      },
+      "dynamicContactQueueingSettings": {
+        "sort": false
+      },
+      "callbackAutoAnswer": false,
+      "selfUri": "/api/v2/outbound/campaigns/f07f914d-40b7-45b8-9b8c-77572b6a8ac7"
+    }
+  ],
+  "pageSize": 100,
+  "pageNumber": 1,
+  "total": 4,
+  "lastUri": "/api/v2/outbound/campaigns?pageSize=100&pageNumber=1",
+  "firstUri": "/api/v2/outbound/campaigns?pageSize=100&pageNumber=1",
+  "selfUri": "/api/v2/outbound/campaigns?pageSize=100&pageNumber=1",
+  "pageCount": 1
+}

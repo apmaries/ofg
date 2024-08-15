@@ -1,0 +1,494 @@
+{
+  "entities": [
+    {
+      "id": "7e5d7b10-9086-4c53-8458-7a24df8b902b",
+      "name": "amBluthCo",
+      "authorized": true,
+      "division": {
+        "id": "1c328efb-fcf3-4ac3-b5c2-987ff3c92afa",
+        "selfUri": "/api/v2/authorization/divisions/1c328efb-fcf3-4ac3-b5c2-987ff3c92afa"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/7e5d7b10-9086-4c53-8458-7a24df8b902b"
+    },
+    {
+      "id": "1a10d2a7-40e1-4236-bc7f-321862492892",
+      "name": "SL_RealPage Affordable",
+      "authorized": true,
+      "division": {
+        "id": "99e9c382-b3d8-4762-b139-5d6a5281b0ae",
+        "selfUri": "/api/v2/authorization/divisions/99e9c382-b3d8-4762-b139-5d6a5281b0ae"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/1a10d2a7-40e1-4236-bc7f-321862492892"
+    },
+    {
+      "id": "3af1c91b-c2bd-4476-8070-030b71ef9c0c",
+      "name": "Joy's Testing 2 BU",
+      "authorized": true,
+      "division": {
+        "id": "30618621-8a13-451a-9afb-b4a417d0514f",
+        "selfUri": "/api/v2/authorization/divisions/30618621-8a13-451a-9afb-b4a417d0514f"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/3af1c91b-c2bd-4476-8070-030b71ef9c0c"
+    },
+    {
+      "id": "08d2987b-1157-4b51-a690-21443c3b2691",
+      "name": "STC",
+      "authorized": true,
+      "division": {
+        "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+        "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/08d2987b-1157-4b51-a690-21443c3b2691"
+    },
+    {
+      "id": "12c8d9a4-5e10-406c-8e41-d43f97ba7e14",
+      "name": "SL_Test",
+      "authorized": true,
+      "division": {
+        "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+        "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/12c8d9a4-5e10-406c-8e41-d43f97ba7e14"
+    },
+    {
+      "id": "69b6da23-ae38-486d-8147-0c20feb986aa",
+      "name": "Test ITOne BU",
+      "authorized": true,
+      "division": {
+        "id": "30618621-8a13-451a-9afb-b4a417d0514f",
+        "selfUri": "/api/v2/authorization/divisions/30618621-8a13-451a-9afb-b4a417d0514f"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/69b6da23-ae38-486d-8147-0c20feb986aa"
+    },
+    {
+      "id": "804e9905-1b62-4e63-bd28-65c85af833f7",
+      "name": "CD Test BU",
+      "authorized": true,
+      "division": {
+        "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+        "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/804e9905-1b62-4e63-bd28-65c85af833f7"
+    },
+    {
+      "id": "eeba7518-9967-4372-90b2-99bdd2ab3989",
+      "name": "KS Test BU 3",
+      "authorized": true,
+      "division": {
+        "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+        "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/eeba7518-9967-4372-90b2-99bdd2ab3989"
+    },
+    {
+      "id": "77452ae5-9cd8-4084-8ddf-7e6b3a2f4cc4",
+      "name": "WW_Amsterdam (BU)",
+      "authorized": true,
+      "division": {
+        "id": "7ecf834e-c7fc-4ad0-b9f2-f8e7873506ca",
+        "selfUri": "/api/v2/authorization/divisions/7ecf834e-c7fc-4ad0-b9f2-f8e7873506ca"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/77452ae5-9cd8-4084-8ddf-7e6b3a2f4cc4"
+    },
+    {
+      "id": "c677f30e-0f36-43c2-b729-12e96ce6f7a3",
+      "name": "Test UM",
+      "authorized": true,
+      "division": {
+        "id": "d718226f-fd58-483d-8f5d-79587c53f87c",
+        "selfUri": "/api/v2/authorization/divisions/d718226f-fd58-483d-8f5d-79587c53f87c"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/c677f30e-0f36-43c2-b729-12e96ce6f7a3"
+    },
+    {
+      "id": "4f91ad64-82f0-479d-8e2e-436602ce94d5",
+      "name": "test PNB",
+      "authorized": true,
+      "division": {
+        "id": "30618621-8a13-451a-9afb-b4a417d0514f",
+        "selfUri": "/api/v2/authorization/divisions/30618621-8a13-451a-9afb-b4a417d0514f"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/4f91ad64-82f0-479d-8e2e-436602ce94d5"
+    },
+    {
+      "id": "58a2bf92-eaf9-46c0-94a6-f1f4cc910217",
+      "name": "Djay Delhi BU",
+      "authorized": true,
+      "division": {
+        "id": "15b12700-9332-4893-ad9e-77bbbf6fbae9",
+        "selfUri": "/api/v2/authorization/divisions/15b12700-9332-4893-ad9e-77bbbf6fbae9"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/58a2bf92-eaf9-46c0-94a6-f1f4cc910217"
+    },
+    {
+      "id": "30bdb46e-c9a5-490a-8fdf-c3969a5d8b6d",
+      "name": "AXA Training",
+      "authorized": true,
+      "division": {
+        "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+        "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/30bdb46e-c9a5-490a-8fdf-c3969a5d8b6d"
+    },
+    {
+      "id": "adcd4d33-3bfa-4a07-8d67-9f98dbeb5c56",
+      "name": "SL+GMF",
+      "authorized": true,
+      "division": {
+        "id": "8bc25fe2-5511-4b8d-a7a5-13a30db6a0a6",
+        "selfUri": "/api/v2/authorization/divisions/8bc25fe2-5511-4b8d-a7a5-13a30db6a0a6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/adcd4d33-3bfa-4a07-8d67-9f98dbeb5c56"
+    },
+    {
+      "id": "4a7437f9-84a7-4746-939e-24ab0b23a478",
+      "name": "KS Test BU",
+      "authorized": true,
+      "division": {
+        "id": "d718226f-fd58-483d-8f5d-79587c53f87c",
+        "selfUri": "/api/v2/authorization/divisions/d718226f-fd58-483d-8f5d-79587c53f87c"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/4a7437f9-84a7-4746-939e-24ab0b23a478"
+    },
+    {
+      "id": "31449baa-24be-4e09-8c5d-2e130fe5ae6c",
+      "name": "SL_RealPage Payments",
+      "authorized": true,
+      "division": {
+        "id": "99e9c382-b3d8-4762-b139-5d6a5281b0ae",
+        "selfUri": "/api/v2/authorization/divisions/99e9c382-b3d8-4762-b139-5d6a5281b0ae"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/31449baa-24be-4e09-8c5d-2e130fe5ae6c"
+    },
+    {
+      "id": "8d04c64a-728b-4bad-8dc7-78304bad786e",
+      "name": "Test BU",
+      "authorized": true,
+      "division": {
+        "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+        "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/8d04c64a-728b-4bad-8dc7-78304bad786e"
+    },
+    {
+      "id": "3000d416-a57c-4a0a-9c9d-2de97a47737f",
+      "name": "Heineken Vendas",
+      "authorized": true,
+      "division": {
+        "id": "789435a3-7b5a-47fa-a72d-60739cc44f12",
+        "selfUri": "/api/v2/authorization/divisions/789435a3-7b5a-47fa-a72d-60739cc44f12"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/3000d416-a57c-4a0a-9c9d-2de97a47737f"
+    },
+    {
+      "id": "9e3c7574-6c51-4394-b225-0795443c84a7",
+      "name": "Prog Leasing",
+      "authorized": true,
+      "division": {
+        "id": "8bc25fe2-5511-4b8d-a7a5-13a30db6a0a6",
+        "selfUri": "/api/v2/authorization/divisions/8bc25fe2-5511-4b8d-a7a5-13a30db6a0a6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/9e3c7574-6c51-4394-b225-0795443c84a7"
+    },
+    {
+      "id": "71391603-2c0d-4d09-a2e0-762645ebe435",
+      "name": "CD test BU",
+      "authorized": true,
+      "division": {
+        "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+        "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/71391603-2c0d-4d09-a2e0-762645ebe435"
+    },
+    {
+      "id": "d4f5c1db-d47f-42ca-a31f-32f8b765bba2",
+      "name": "SK_Test BU",
+      "authorized": true,
+      "division": {
+        "id": "b6f003c3-bd90-40c6-b286-91531b8f241e",
+        "selfUri": "/api/v2/authorization/divisions/b6f003c3-bd90-40c6-b286-91531b8f241e"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/d4f5c1db-d47f-42ca-a31f-32f8b765bba2"
+    },
+    {
+      "id": "720e8d61-ce07-40aa-a3c5-708deec15d17",
+      "name": "RB_Business Unit",
+      "authorized": true,
+      "division": {
+        "id": "07ddf5da-d6cb-4604-9c03-093f64c6d4d6",
+        "selfUri": "/api/v2/authorization/divisions/07ddf5da-d6cb-4604-9c03-093f64c6d4d6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/720e8d61-ce07-40aa-a3c5-708deec15d17"
+    },
+    {
+      "id": "56216b00-ff1b-4a1e-bb43-7862291fd188",
+      "name": "Test BU Sarfaraz",
+      "authorized": true,
+      "division": {
+        "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+        "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/56216b00-ff1b-4a1e-bb43-7862291fd188"
+    },
+    {
+      "id": "275349cb-46e3-45c8-a331-266ed2e3248c",
+      "name": "Joy's BU",
+      "authorized": true,
+      "division": {
+        "id": "30618621-8a13-451a-9afb-b4a417d0514f",
+        "selfUri": "/api/v2/authorization/divisions/30618621-8a13-451a-9afb-b4a417d0514f"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/275349cb-46e3-45c8-a331-266ed2e3248c"
+    },
+    {
+      "id": "b305b138-18fe-4fb3-b5b5-77114bbf3f83",
+      "name": "sxm test",
+      "authorized": true,
+      "division": {
+        "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+        "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/b305b138-18fe-4fb3-b5b5-77114bbf3f83"
+    },
+    {
+      "id": "dd92bdec-394f-432d-a6f5-2d23dfbfcbc6",
+      "name": "CJ Workforce KL BU",
+      "authorized": true,
+      "division": {
+        "id": "b5f30a24-4c42-4fc3-8daf-964ab5d31b78",
+        "selfUri": "/api/v2/authorization/divisions/b5f30a24-4c42-4fc3-8daf-964ab5d31b78"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/dd92bdec-394f-432d-a6f5-2d23dfbfcbc6"
+    },
+    {
+      "id": "aa6ddbbd-2c66-4450-a329-4c9c0584d1f9",
+      "name": "SL_BU",
+      "authorized": true,
+      "division": {
+        "id": "8bc25fe2-5511-4b8d-a7a5-13a30db6a0a6",
+        "selfUri": "/api/v2/authorization/divisions/8bc25fe2-5511-4b8d-a7a5-13a30db6a0a6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/aa6ddbbd-2c66-4450-a329-4c9c0584d1f9"
+    },
+    {
+      "id": "3a800ede-cfe6-41e9-bccf-5143679e42d6",
+      "name": "SL_Test1",
+      "authorized": true,
+      "division": {
+        "id": "8bc25fe2-5511-4b8d-a7a5-13a30db6a0a6",
+        "selfUri": "/api/v2/authorization/divisions/8bc25fe2-5511-4b8d-a7a5-13a30db6a0a6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/3a800ede-cfe6-41e9-bccf-5143679e42d6"
+    },
+    {
+      "id": "595eb389-e150-4492-8825-b764cc9d9bfe",
+      "name": "*amOB",
+      "authorized": true,
+      "division": {
+        "id": "bf040bf2-9821-4fdd-a8b6-2a1a112a4d03",
+        "selfUri": "/api/v2/authorization/divisions/bf040bf2-9821-4fdd-a8b6-2a1a112a4d03"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/595eb389-e150-4492-8825-b764cc9d9bfe"
+    },
+    {
+      "id": "2f5c5f15-8545-470a-8c8e-9289e019d3eb",
+      "name": "Dunder Mifflin",
+      "authorized": true,
+      "division": {
+        "id": "e798387e-a708-40da-8486-d6877e7c7991",
+        "selfUri": "/api/v2/authorization/divisions/e798387e-a708-40da-8486-d6877e7c7991"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/2f5c5f15-8545-470a-8c8e-9289e019d3eb"
+    },
+    {
+      "id": "452e295e-2a71-4469-86b0-fa31a2bad79d",
+      "name": "Bruno BU",
+      "authorized": true,
+      "division": {
+        "id": "b3ca891f-dbc8-4880-8017-ce1afcb73c82",
+        "selfUri": "/api/v2/authorization/divisions/b3ca891f-dbc8-4880-8017-ce1afcb73c82"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/452e295e-2a71-4469-86b0-fa31a2bad79d"
+    },
+    {
+      "id": "c4688850-e237-445d-93cf-f5a8f75c2f51",
+      "name": "Docusign ",
+      "authorized": true,
+      "division": {
+        "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+        "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/c4688850-e237-445d-93cf-f5a8f75c2f51"
+    },
+    {
+      "id": "66ec2124-b8b2-459e-bddb-47352749f809",
+      "name": "Operation Treadstone",
+      "authorized": true,
+      "division": {
+        "id": "182673b4-9607-4f98-9deb-fe2e295f6f0c",
+        "selfUri": "/api/v2/authorization/divisions/182673b4-9607-4f98-9deb-fe2e295f6f0c"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/66ec2124-b8b2-459e-bddb-47352749f809"
+    },
+    {
+      "id": "5dece68f-1d79-4913-9c4e-55d5b8bd4d24",
+      "name": "GMF_SL",
+      "authorized": true,
+      "division": {
+        "id": "8bc25fe2-5511-4b8d-a7a5-13a30db6a0a6",
+        "selfUri": "/api/v2/authorization/divisions/8bc25fe2-5511-4b8d-a7a5-13a30db6a0a6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/5dece68f-1d79-4913-9c4e-55d5b8bd4d24"
+    },
+    {
+      "id": "b99e8295-12a8-4e28-ba60-1b4d2188c409",
+      "name": "LS_JP",
+      "authorized": true,
+      "division": {
+        "id": "ec444566-1269-4367-8512-8d42af410458",
+        "selfUri": "/api/v2/authorization/divisions/ec444566-1269-4367-8512-8d42af410458"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/b99e8295-12a8-4e28-ba60-1b4d2188c409"
+    },
+    {
+      "id": "c6d87182-a52a-49e7-87d1-cd9273cb5120",
+      "name": "Test BU Joy's",
+      "authorized": true,
+      "division": {
+        "id": "30618621-8a13-451a-9afb-b4a417d0514f",
+        "selfUri": "/api/v2/authorization/divisions/30618621-8a13-451a-9afb-b4a417d0514f"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/c6d87182-a52a-49e7-87d1-cd9273cb5120"
+    },
+    {
+      "id": "3f7df375-b55b-4616-a6f8-d4c7f897b701",
+      "name": "KS Test BU 2",
+      "authorized": true,
+      "division": {
+        "id": "d718226f-fd58-483d-8f5d-79587c53f87c",
+        "selfUri": "/api/v2/authorization/divisions/d718226f-fd58-483d-8f5d-79587c53f87c"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/3f7df375-b55b-4616-a6f8-d4c7f897b701"
+    },
+    {
+      "id": "243dedb8-93dd-49e3-a848-aed82b776435",
+      "name": "BU Example",
+      "authorized": true,
+      "division": {
+        "id": "3ead8f77-1b43-4f66-82bb-dea2d5dd5db6",
+        "selfUri": "/api/v2/authorization/divisions/3ead8f77-1b43-4f66-82bb-dea2d5dd5db6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/243dedb8-93dd-49e3-a848-aed82b776435"
+    },
+    {
+      "id": "d7d30893-7026-478b-b6d4-69186198583d",
+      "name": "KHBU1",
+      "authorized": true,
+      "division": {
+        "id": "877586eb-934f-47bf-84d4-03136c3c1b8e",
+        "selfUri": "/api/v2/authorization/divisions/877586eb-934f-47bf-84d4-03136c3c1b8e"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/d7d30893-7026-478b-b6d4-69186198583d"
+    },
+    {
+      "id": "c9fa3c56-e171-48ba-85d7-d39b8d20707b",
+      "name": "CD Melbourne BU",
+      "authorized": true,
+      "division": {
+        "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+        "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/c9fa3c56-e171-48ba-85d7-d39b8d20707b"
+    },
+    {
+      "id": "5d57c787-9d76-44b7-a084-3ac4716d4281",
+      "name": "JKC Test",
+      "authorized": true,
+      "division": {
+        "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+        "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/5d57c787-9d76-44b7-a084-3ac4716d4281"
+    },
+    {
+      "id": "51ecf50c-0eb8-487a-9534-9356c0fde6a4",
+      "name": "CD Auckland BU",
+      "authorized": true,
+      "division": {
+        "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+        "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/51ecf50c-0eb8-487a-9534-9356c0fde6a4"
+    },
+    {
+      "id": "4058b85d-83ce-45ec-b240-16586a774794",
+      "name": "LS_Sales",
+      "authorized": true,
+      "division": {
+        "id": "ec444566-1269-4367-8512-8d42af410458",
+        "selfUri": "/api/v2/authorization/divisions/ec444566-1269-4367-8512-8d42af410458"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/4058b85d-83ce-45ec-b240-16586a774794"
+    },
+    {
+      "id": "bdfba17c-7b6a-41ad-a4a0-9bfb4d5af8d4",
+      "name": "RT Customer Care",
+      "authorized": true,
+      "division": {
+        "id": "9330845a-b076-4c6d-8577-978fdec92553",
+        "selfUri": "/api/v2/authorization/divisions/9330845a-b076-4c6d-8577-978fdec92553"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/bdfba17c-7b6a-41ad-a4a0-9bfb4d5af8d4"
+    },
+    {
+      "id": "b7ba114e-f861-462b-9c56-914be1e7061c",
+      "name": "SK-Test 2",
+      "authorized": true,
+      "division": {
+        "id": "b6f003c3-bd90-40c6-b286-91531b8f241e",
+        "selfUri": "/api/v2/authorization/divisions/b6f003c3-bd90-40c6-b286-91531b8f241e"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/b7ba114e-f861-462b-9c56-914be1e7061c"
+    },
+    {
+      "id": "b37714a3-d085-4f9c-96b3-876fa34efbc4",
+      "name": "Operation Outcome",
+      "authorized": true,
+      "division": {
+        "id": "52b1635e-e923-40ed-b683-f6b5b14338e2",
+        "selfUri": "/api/v2/authorization/divisions/52b1635e-e923-40ed-b683-f6b5b14338e2"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/b37714a3-d085-4f9c-96b3-876fa34efbc4"
+    },
+    {
+      "id": "4828857c-faaa-4569-84ba-1a4f9ad6a070",
+      "name": "BH_BU",
+      "authorized": true,
+      "division": {
+        "id": "a318a3f7-8b3d-4bfd-853b-a2c934db057f",
+        "selfUri": "/api/v2/authorization/divisions/a318a3f7-8b3d-4bfd-853b-a2c934db057f"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/4828857c-faaa-4569-84ba-1a4f9ad6a070"
+    },
+    {
+      "id": "604aff2e-b25a-4d3b-a476-75f7567bec26",
+      "name": "amApiTesting",
+      "authorized": true,
+      "division": {
+        "id": "1c328efb-fcf3-4ac3-b5c2-987ff3c92afa",
+        "selfUri": "/api/v2/authorization/divisions/1c328efb-fcf3-4ac3-b5c2-987ff3c92afa"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/604aff2e-b25a-4d3b-a476-75f7567bec26"
+    },
+    {
+      "id": "075b8e00-78aa-4569-9ade-a5ac021d12f9",
+      "name": "RT Shop",
+      "authorized": true,
+      "division": {
+        "id": "9330845a-b076-4c6d-8577-978fdec92553",
+        "selfUri": "/api/v2/authorization/divisions/9330845a-b076-4c6d-8577-978fdec92553"
+      },
+      "selfUri": "/api/v2/workforcemanagement/businessunits/075b8e00-78aa-4569-9ade-a5ac021d12f9"
+    }
+  ]
+}

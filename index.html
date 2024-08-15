@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Outbound Forecast Generator</title>
+    <link rel="icon" href="./img/favicon.ico" type="image/x-icon" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./styles/styles.css" />
+
+    <!-- Error handling -->
+    <script src="./src/core/errorManager.js"></script>
+
+    <!-- Genesys stuff -->
+    <link
+      href="https://dhqbrvplips7x.cloudfront.net/common-ui-docs/genesys-webcomponents/3.8.1-178/genesys-webcomponents/genesys-webcomponents.css"
+      rel="stylesheet"
+    />
+    <script
+      type="module"
+      src="https://dhqbrvplips7x.cloudfront.net/common-ui-docs/genesys-webcomponents/3.8.1-178/genesys-webcomponents/genesys-webcomponents.esm.js"
+    ></script>
+
+    <!-- External -->
+    <script src="https://moment.github.io/luxon/global/luxon.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.4/pako.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  </head>
+  <body>
+    <div class="widget-container">
+      <h1 id="heading" class="align-left">Outbound Forecast Generator</h1>
+      <div id="user-welcome" class="align-left"></div>
+      <!-- Loading section -->
+      <section id="main-loading-section">
+        <gux-page-loading-spinner
+          screenreader-text="Loading..."
+        ></gux-page-loading-spinner>
+      </section>
+      <!-- Main -->
+      <main id="main">
+        <!-- Page 1 - Set BU, Forecast week start and historical weeks range -->
+        <div id="page-one" class="active-page">
+          <fieldset id="page-one-fieldset">
+            <legend>Parameters</legend>
+
+            <div id="parameters">
+              <gux-form-field-dropdown class="width">
+                <gux-dropdown id="business-unit-dropdown">
+                  <gux-listbox id="business-unit-listbox"> </gux-listbox>
+                </gux-dropdown>
+                <label slot="label">Business Unit</label>
+              </gux-form-field-dropdown>
+              <div id="bu-settings-div">
+                <div style="width: 152px">
+                  <gux-form-field-text-like label-position="above">
+                    <label slot="label">Time zone</label>
+                    <input
+                      id="bu-timezone"
+                      slot="input"
+                      type="text"
+                      value=""
+                      disabled
+                    />
+                  </gux-form-field-text-like>
+                </div>
+
+                <div>
+                  <label slot="label" class="slotted" id="week-start-label"
+                    >Week start</label
+                  >
+                  <gux-datepicker
+                    id="week-start"
+                    format="dd/mm/yyyy"
+                  ></gux-datepicker>
+                </div>
+
+                <div>
+                  <gux-form-field-number label-position="above">
+                    <label slot="label">Historical weeks</label>
+                    <input
+                      slot="input"
+                      type="number"
+                      id="historical-weeks"
+                      value="6"
+                      step="1"
+                      min="1"
+                      max="8"
+                    />
+                  </gux-form-field-number>
+                </div>
+              </div>
+
+              <div id="toggle-sch" style="display: none">
+                <!-- temporarily hidden until functionality added -->
+                <label for="inclSchedule">Generate schedule too?</label>
+                <gux-toggle
+                  id="inclSchedule"
+                  checked-label="Yes"
+                  unchecked-label="No"
+                ></gux-toggle>
+              </div>
+              <gux-button id="p1-next-button" accent="secondary"
+                >Next</gux-button
+              >
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Page 2 - Set description, contacts per PG and other options -->
+        <div id="page-two" class="inactive-page">
+          <fieldset id="page-two-fieldset">
+            <legend>Inputs</legend>
+            <div id="planning-groups">
+              <gux-page-loading-spinner
+                id="planning-groups-loading"
+                screenreader-text="Loading..."
+              ></gux-page-loading-spinner>
+
+              <div id="planning-groups-container" style="display: none">
+                <div id="fc-description-input">
+                  <gux-form-field-text-like>
+                    <input
+                      id="fc-description"
+                      slot="input"
+                      type="text"
+                      placeholder="Enter a description"
+                    />
+                    <label slot="label">Forecast description</label>
+                  </gux-form-field-text-like>
+                </div>
+                <gux-table-beta id="planning-groups-table" compact>
+                  <table slot="data">
+                    <thead>
+                      <tr>
+                        <th data-column-name="p-name" style="width: 90%">
+                          Planning Group<br /><span class="italic-gray"
+                            >[Campaign]</span
+                          >
+                        </th>
+                        <th data-column-name="n-contacts"># Contacts</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody></table
+                ></gux-table-beta>
+
+                <fieldset>
+                  <!-- Ignores full days of zero contacts (e.g. public holidays) -->
+                  <legend>Outbound options</legend>
+                  <label for="ignore-zeroes"
+                    >Ignore zero days when generating averages?
+                    <gux-icon
+                      icon-name="help"
+                      screenreader-text="help-icon"
+                    ></gux-icon
+                    ><gux-tooltip
+                      >Exclude days of zero values (e.g. closed public holiday)
+                      during forecast generation to prevent distortion of
+                      results.</gux-tooltip
+                    ></label
+                  >
+                  <gux-toggle
+                    id="ignore-zeroes"
+                    checked-label="Yes"
+                    unchecked-label="No"
+                    checked
+                  ></gux-toggle>
+                  <!-- Applies the daily AHT value to any interval with forecast offered but no AHT forecast -->
+                  <!-- Not currently needed
+                  <label for="resolve-contacts-aht"
+                    >Resolve AHT forecast to Contacts?
+                    <gux-icon
+                      icon-name="help"
+                      screenreader-text="help-icon"
+                    ></gux-icon
+                    ><gux-tooltip
+                      >Make sure the forecast being generated always has AHT in
+                      the same intervals as offered. (e.g. no intervals with
+                      forecast offered but no handle time)</gux-tooltip
+                    ></label
+                  >
+                 
+
+                  <gux-toggle
+                    id="resolve-contacts-aht"
+                    checked-label="Yes"
+                    unchecked-label="No"
+                    checked
+                  ></gux-toggle>
+                  -->
+                </fieldset>
+                <div id="inbound-forecast-div" style="display: none">
+                  <!-- Hidden until Planning Groups identified with no matching Campaign -->
+                  <fieldset>
+                    <legend>Inbound options</legend>
+
+                    <label for="generate-inbound-fc"
+                      >Generate forecast for inbound Planning Groups?
+                      <gux-icon
+                        icon-name="help"
+                        screenreader-text="help-icon"
+                      ></gux-icon
+                      ><gux-tooltip
+                        >Generates an ABM forecast for BU Planning Groups and
+                        merges results with Outbound data</gux-tooltip
+                      ></label
+                    >
+                    <gux-toggle
+                      id="generate-inbound-fc"
+                      checked-label="Yes"
+                      unchecked-label="No"
+                    ></gux-toggle>
+
+                    <label for="retain-inbound-fc"
+                      >Retain forecast for inbound Planning Groups?
+                      <gux-icon
+                        icon-name="help"
+                        screenreader-text="help-icon"
+                      ></gux-icon
+                      ><gux-tooltip
+                        >If yes, the automatically generated inbound forecast
+                        will be retained for reference.<br />If no, this inbound
+                        forecast is deleted after forecasts have been
+                        merged.</gux-tooltip
+                      ></label
+                    >
+                    <gux-toggle
+                      id="retain-inbound-fc"
+                      checked-label="Yes"
+                      unchecked-label="No"
+                    ></gux-toggle>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+            <div id="page-two-buttons" class="row" style="padding-top: 20px">
+              <gux-button
+                id="p2-back-button"
+                name="back-button"
+                accent="secondary"
+                class="align-left"
+                >Back</gux-button
+              >
+              <gux-button id="generate-button" accent="primary"
+                >Generate</gux-button
+              >
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Page 3 - Visualise forecast outputs prior to import -->
+        <div id="page-three" class="inactive-page">
+          <fieldset id="page-three-fieldset">
+            <legend>Outputs</legend>
+            <div id="generate-loading-div">
+              <gux-loading-message>
+                <div slot="primary-message" id="generate-loading-message">
+                  Generating forecast
+                </div>
+
+                <gux-radial-progress
+                  slot="progress"
+                  screenreader-text="loading"
+                ></gux-radial-progress>
+                <div slot="additional-guidance">Thank you for waiting.</div>
+              </gux-loading-message>
+            </div>
+            <div id="forecast-outputs-container" style="display: none">
+              <gux-form-field-dropdown class="width">
+                <gux-dropdown id="planning-group-dropdown" disabled>
+                  <gux-listbox id="planning-group-listbox"> </gux-listbox>
+                </gux-dropdown>
+                <label slot="label">Planning Group</label>
+              </gux-form-field-dropdown>
+              <gux-form-field-dropdown class="width">
+                <gux-dropdown id="week-day-dropdown" disabled>
+                  <gux-listbox id="week-day-listbox"> </gux-listbox>
+                </gux-dropdown>
+                <label slot="label">Day of Week</label>
+              </gux-form-field-dropdown>
+              <div id="chart"></div>
+              <div id="totals-table" hidden>
+                <gux-table-beta>
+                  <table slot="data">
+                    <thead>
+                      <tr>
+                        <th data-column-name="totals-interval">Total for</th>
+                        <th data-column-name="forecast-offered">
+                          Forecast Offered
+                        </th>
+                        <th data-column-name="forecast-aht">Forecast AHT</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr id="fc-day-tr">
+                        <td id="fc-day-tr-heading">Day</td>
+                        <td id="fc-day-offered">0</td>
+                        <td id="fc-day-aht">0</td>
+                      </tr>
+                      <tr id="fc-week-tr">
+                        <td>Week</td>
+                        <td id="fc-week-offered">0</td>
+                        <td id="fc-week-aht">0</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </gux-table-beta>
+              </div>
+              <div id="controls" hidden>
+                <gux-form-field-dropdown>
+                  <gux-dropdown
+                    id="metric-select"
+                    placeholder="Select a Metric"
+                  >
+                    <gux-listbox>
+                      <gux-option value="offered">Offered</gux-option>
+                      <gux-option value="aver-handle-time"
+                        >Average Handle Time</gux-option
+                      >
+                      <gux-option value="both">Both</gux-option>
+                    </gux-listbox>
+                  </gux-dropdown>
+                  <label slot="label">Metric</label>
+                </gux-form-field-dropdown>
+
+                <gux-button id="smooth-button" accent="tertiary"
+                  >Smooth
+                  <gux-tooltip>
+                    Smooth with 3 point moving average
+                  </gux-tooltip></gux-button
+                >
+                <gux-button id="trendline-button" accent="tertiary"
+                  >Trendline
+                  <gux-tooltip>
+                    Create a trendline using linear regression
+                  </gux-tooltip></gux-button
+                >
+                <gux-button id="flatten-button" accent="tertiary"
+                  >Flatten<gux-tooltip>
+                    Flatten to single value
+                  </gux-tooltip></gux-button
+                >
+                <gux-button id="reset-button" accent="danger"
+                  >Reset<gux-tooltip>
+                    Reset back to original values
+                  </gux-tooltip></gux-button
+                >
+              </div>
+            </div>
+            <div id="page-three-buttons" class="row" style="padding-top: 20px">
+              <gux-button
+                id="p3-back-button"
+                name="back-button"
+                accent="secondary"
+                class="align-left"
+                >Back</gux-button
+              >
+
+              <gux-button
+                id="import-button"
+                accent="primary"
+                class="align-right"
+                >Import</gux-button
+              >
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Page 4 - Display import response -->
+        <div id="page-four" class="inactive-page">
+          <fieldset id="page-four-fieldset">
+            <legend>Results</legend>
+            <div id="import-results-container">
+              <gux-table-beta>
+                <table slot="data" class="width">
+                  <thead>
+                    <tr>
+                      <th data-column-name="import-step">Step</th>
+                      <th data-column-name="status">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Subscribe to import notifications</td>
+                      <td id="import-step-one-status">Pending</td>
+                    </tr>
+                    <tr>
+                      <td>Prepare import file</td>
+                      <td id="import-step-two-status">Pending</td>
+                    </tr>
+                    <tr>
+                      <td>Generate upload URL</td>
+                      <td id="import-step-three-status">Pending</td>
+                    </tr>
+                    <tr>
+                      <td>Upload import file</td>
+                      <td id="import-step-four-status">Pending</td>
+                    </tr>
+                    <tr>
+                      <td>Import forecast</td>
+                      <td id="import-step-five-status">Pending</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </gux-table-beta>
+            </div>
+            <div id="import-success-div" style="display: none">
+              <gux-card-beta
+                id="import-success-card"
+                class="width"
+                style="background-color: #d4edda"
+              >
+                <h4>Forecast imported successfully!</h4>
+              </gux-card-beta>
+            </div>
+            <div id="import-fail-div" style="display: none">
+              <gux-card-beta
+                id="import-fail-card"
+                class="width"
+                style="background-color: #f8d7da"
+              ></gux-card-beta>
+            </div>
+            <div id="page-four-buttons" class="row" style="padding-top: 20px">
+              <gux-button
+                id="restart-button"
+                accent="secondary"
+                class="align-left"
+                >Restart</gux-button
+              >
+              <!-- Can't seem to make this work easily will remain as disabled -->
+              <gux-button
+                id="open-forecast-button"
+                accent="primary"
+                class="align-right"
+                style="display: none"
+                disabled
+                >Open</gux-button
+              >
+            </div>
+          </fieldset>
+        </div>
+        <div id="test-mode" class="align-left" hidden></div>
+      </main>
+      <footer><img src="./img/logo-black.png" /></footer>
+    </div>
+    <!-- Load Genesys Cloud SDK's -->
+    <script src="https://sdk-cdn.mypurecloud.com/javascript/latest/purecloud-platform-client-v2.min.js"></script>
+    <script src="https://sdk-cdn.mypurecloud.com/client-apps/2.6.6/purecloud-client-app-sdk.js"></script>
+
+    <script type="module">
+      import { startApp } from "./src/app.js";
+      startApp()
+        .then(() => {
+          console.log("[OFG] Application started");
+        })
+        .catch((err) => {
+          console.error("[OFG] Error during start:", err);
+        });
+    </script>
+  </body>
+</html>

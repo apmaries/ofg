@@ -1,0 +1,178 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  max-width: 450px; /* temp: Set the maximum width as needed */
+}
+
+body > div {
+  flex: 1 0 auto; /* This will make the div take up all available space */
+}
+
+main {
+  display: none;
+  flex: 1;
+}
+
+fieldset {
+  width: 95%;
+  max-width: 450px;
+  box-sizing: border-box;
+}
+
+fieldset > div > div {
+  margin-bottom: 20px;
+}
+
+gux-button {
+  width: 100px;
+}
+
+gux-tooltip {
+  font-size: 12px;
+  font-weight: normal;
+  padding: 5px;
+}
+
+gux-form-field-number {
+  width: 150px;
+}
+
+footer {
+  flex-shrink: 0; /* This will prevent the footer from shrinking */
+  width: 100%;
+  /* text-align: right; */
+}
+
+footer img {
+  margin-bottom: 20px;
+  margin-right: 5px;
+}
+
+#loading-section {
+  display: block;
+}
+
+.widget-container {
+  max-width: 95%; /* Set the maximum width as needed */
+  margin: 0 auto; /* Center the widget within the parent container */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.form-container {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.slotted {
+  font-family: Roboto, sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 16px;
+  margin-bottom: 8px;
+}
+
+.error {
+  border: 2px solid red;
+}
+
+.width {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+.row .width {
+  flex: 1;
+}
+
+.align-right {
+  margin-left: auto;
+}
+
+.align-left {
+  margin-right: auto;
+}
+
+.active-page {
+  display: block;
+  opacity: 1;
+}
+
+.inactive-page {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.italic-gray {
+  color: grey;
+  font-style: italic;
+}
+
+.alert-danger,
+.alert-success {
+  border-radius: 50em;
+  padding: 2px;
+
+  text-align: center;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+#planning-groups-table td {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  padding-right: 12px;
+}
+
+@keyframes bulge {
+  0% {
+    transform: scale(1);
+    font-weight: normal;
+  }
+  50% {
+    transform: scale(1.1);
+    font-weight: bold;
+  }
+  100% {
+    transform: scale(1);
+    font-weight: normal;
+  }
+}
+
+.bulge-animation {
+  animation: bulge 0.5s ease-in-out;
+}
+
+@keyframes flash {
+  0% {
+    color: black;
+  }
+  50% {
+    color: red;
+  }
+  100% {
+    color: black;
+  }
+}
+
+.flash {
+  animation: flash 0.5s linear;
+}

@@ -1,0 +1,10 @@
+# Ignore all files by extension
+*.env
+*.py
+*.nvmrc
+
+# Ignore all files in a directory
+.ignored/
+
+# IDE/Editor
+.vscode/
