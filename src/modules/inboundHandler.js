@@ -85,81 +85,6 @@ async function getInboundForecastData(forecastId) {
   }
 }
 
-// Handle the asynchronous forecast generation
-async function handleAsyncForecastGeneration(buId) {
-  console.log("[OFG.INBOUND] Handling async forecast generation");
-  const topics = ["shorttermforecasts.generate"];
-
-  try {
-    let generateNotifications = new NotificationHandler(
-      topics,
-      buId,
-      onSubscriptionSuccess,
-      handleInboundForecastNotification
-    );
-
-    generateNotifications.connect();
-    generateNotifications.subscribeToNotifications();
-
-    function onSubscriptionSuccess() {
-      console.log(
-        "[OFG.INBOUND] Successfully subscribed to forecast generate notifications"
-      );
-    }
-
-    // Handle the inbound forecast notification
-    async function handleInboundForecastNotification(notification) {
-      // Check if "shorttermforecasts.generate" notification
-      if (!notification.topicName.includes("shorttermforecasts.generate")) {
-        return;
-      }
-
-      console.log("[OFG.INBOUND] Processing result from notification");
-
-      let generateOperationId = applicationConfig.inbound.operationId;
-
-      if (
-        notification.eventBody &&
-        notification.eventBody.operationId === generateOperationId
-      ) {
-        const status = notification.eventBody.status;
-        console.log(
-          `[OFG.INBOUND] Generate inbound forecast status updated <${status}>`
-        );
-
-        if (status === "Complete") {
-          const forecastId = notification.eventBody.result.id;
-          applicationConfig.inbound.inboundFcId = forecastId;
-          const inboundForecastData = await getInboundForecastData(forecastId);
-          await transformAndLoadInboundForecast(inboundForecastData);
-          generateNotifications.disconnect();
-        } else if (status === "Processing") {
-          console.log(
-            "[OFG.INBOUND] Inbound forecast generation is still processing."
-          );
-          // Any additional logic needed?
-        } else if (status === "Error") {
-          console.error(
-            "[OFG.INBOUND] Inbound forecast generation failed with status: ",
-            notification.eventBody
-          );
-          generateNotifications.disconnect();
-          throw new Error("Inbound forecast generation failed");
-        } else {
-          // Handle unknown status if necessary
-          console.warn("[OFG.INBOUND] Received unknown status: ", status);
-        }
-      }
-    }
-  } catch (error) {
-    console.error(
-      "[OFG.INBOUND] Error occurred while subscribing to notifications:",
-      error
-    );
-    throw new Error("Inbound forecast generation failed: " + error.message);
-  }
-}
-
 // Function to transform and load inbound forecast data
 async function transformAndLoadInboundForecast(inboundFcData) {
   console.log("[OFG.INBOUND] Transforming and loading inbound forecast data");
@@ -216,6 +141,96 @@ async function transformAndLoadInboundForecast(inboundFcData) {
   });
 }
 
+// Handle the asynchronous forecast generation
+async function handleAsyncForecastGeneration(buId) {
+  console.log("[OFG.INBOUND] Handling async forecast generation");
+  const topics = ["shorttermforecasts.generate"];
+
+  return new Promise((resolve, reject) => {
+    try {
+      let generateNotifications = new NotificationHandler(
+        topics,
+        buId,
+        onSubscriptionSuccess,
+        handleInboundForecastNotification
+      );
+
+      generateNotifications.connect();
+      generateNotifications.subscribeToNotifications();
+
+      function onSubscriptionSuccess() {
+        console.log(
+          "[OFG.INBOUND] Successfully subscribed to forecast generate notifications"
+        );
+      }
+
+      // Handle the inbound forecast notification
+      async function handleInboundForecastNotification(notification) {
+        // Check if "shorttermforecasts.generate" notification
+        if (!notification.topicName.includes("shorttermforecasts.generate")) {
+          return;
+        }
+
+        console.log("[OFG.INBOUND] Processing result from notification");
+
+        let generateOperationId = applicationConfig.inbound.operationId;
+
+        if (
+          notification.eventBody &&
+          notification.eventBody.operationId === generateOperationId
+        ) {
+          const status = notification.eventBody.status;
+          console.log(
+            `[OFG.INBOUND] Generate inbound forecast status updated <${status}>`
+          );
+
+          if (status === "Complete") {
+            const forecastId = notification.eventBody.result.id;
+            applicationConfig.inbound.inboundFcId = forecastId;
+            const inboundForecastData = await getInboundForecastData(
+              forecastId
+            );
+            await transformAndLoadInboundForecast(inboundForecastData);
+            generateNotifications.disconnect();
+
+            // Dispatch the custom event when the forecast generation is complete
+            const event = new CustomEvent("inboundForecastComplete", {
+              detail: {
+                retainInbound:
+                  applicationState.userInputs.forecastOptions.retainInbound,
+              },
+            });
+            window.dispatchEvent(event);
+
+            resolve(); // Resolve the promise when complete
+          } else if (status === "Processing") {
+            console.log(
+              "[OFG.INBOUND] Inbound forecast generation is still processing."
+            );
+            // Any additional logic needed?
+          } else if (status === "Error") {
+            console.error(
+              "[OFG.INBOUND] Inbound forecast generation failed with status: ",
+              notification.eventBody
+            );
+            generateNotifications.disconnect();
+            reject(new Error("Inbound forecast generation failed"));
+          } else {
+            // Handle unknown status if necessary
+            console.warn("[OFG.INBOUND] Received unknown status: ", status);
+          }
+        }
+      }
+    } catch (error) {
+      console.error(
+        "[OFG.INBOUND] Error occurred while subscribing to notifications:",
+        error
+      );
+      reject(new Error("Inbound forecast generation failed: " + error.message));
+    }
+  });
+}
+
 // Primary function to generate the inbound forecast
 export async function generateInboundForecast() {
   console.info("[OFG.INBOUND] Initiating inbound forecast generation");
@@ -234,6 +249,16 @@ export async function generateInboundForecast() {
     );
     await transformAndLoadInboundForecast(inboundForecastData);
     applicationConfig.inbound.inboundForecastId = "abc-123";
+
+    // Dispatch the custom event when the forecast generation is complete
+    const event = new CustomEvent("inboundForecastComplete", {
+      detail: {
+        retainInbound:
+          applicationState.userInputs.forecastOptions.retainInbound,
+      },
+    });
+    window.dispatchEvent(event);
+
     return;
   }
 
@@ -254,6 +279,16 @@ export async function generateInboundForecast() {
       "[OFG.INBOUND] Inbound forecast generation complete",
       inboundForecastData
     );
+
+    // Dispatch the custom event when the forecast generation is complete
+    const event = new CustomEvent("inboundForecastComplete", {
+      detail: {
+        retainInbound:
+          applicationState.userInputs.forecastOptions.retainInbound,
+      },
+    });
+    window.dispatchEvent(event);
+
     return inboundForecastData;
   } else if (generateResponse.status === "Processing") {
     // Asynchronous handling through notifications

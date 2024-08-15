@@ -288,9 +288,16 @@ export async function generateForecast() {
 
     try {
       await generateInboundForecast();
-      if (!applicationState.userInputs.forecastOptions.retainInbound) {
-        deleteInboundForecast();
-      }
+
+      // Dispatch a custom event when the forecast generation is complete
+      const event = new CustomEvent("inboundForecastComplete", {
+        detail: {
+          retainInbound:
+            applicationState.userInputs.forecastOptions.retainInbound,
+        },
+      });
+      window.dispatchEvent(event);
+
       console.info("[OFG.GENERATE] Inbound groups processed");
     } catch (inboundError) {
       displayErrorCard(
@@ -298,6 +305,13 @@ export async function generateForecast() {
         inboundError.message || inboundError
       );
     }
+
+    // Listen for the custom event and delete the inbound forecast if needed
+    window.addEventListener("inboundForecastComplete", (event) => {
+      if (!event.detail.retainInbound) {
+        deleteInboundForecast();
+      }
+    });
   }
 }
 
