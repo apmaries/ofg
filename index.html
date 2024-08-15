@@ -373,118 +373,39 @@
         <div id="page-four" class="inactive-page">
           <fieldset id="page-four-fieldset">
             <legend>Results</legend>
-            <div id="import-results-container" style="display: none">
-              <div id="import-step-one" style="display: none">
-                <h5>
-                  Subscribe to import notifications
-                  <gux-icon
-                    id="import-step-one-success-icon"
-                    icon-name="alert-success"
-                    class="alert-success"
-                    style="display: none"
-                    decorative
-                  ></gux-icon>
-                  <gux-icon
-                    id="import-step-one-fail-icon"
-                    icon-name="alert-warning-octogon"
-                    class="alert-danger"
-                    style="display: none"
-                    decorative
-                  ></gux-icon>
-                </h5>
-              </div>
-
-              <div id="import-step-two" style="display: none">
-                <h5>
-                  Prepare import file
-                  <gux-icon
-                    id="import-step-two-success-icon"
-                    icon-name="alert-success"
-                    class="alert-success"
-                    style="display: none"
-                    decorative
-                  ></gux-icon>
-                  <gux-icon
-                    id="import-step-two-fail-icon"
-                    icon-name="alert-warning-octogon"
-                    class="alert-danger"
-                    style="display: none"
-                    decorative
-                  ></gux-icon>
-                </h5>
-              </div>
-
-              <div id="import-step-three" style="display: none">
-                <h5>
-                  Generate upload URL
-                  <gux-icon
-                    id="import-step-three-success-icon"
-                    icon-name="alert-success"
-                    class="alert-success"
-                    style="display: none"
-                    decorative
-                  ></gux-icon>
-                  <gux-icon
-                    id="import-step-three-fail-icon"
-                    icon-name="alert-warning-octogon"
-                    class="alert-danger"
-                    style="display: none"
-                    decorative
-                  ></gux-icon>
-                </h5>
-              </div>
-
-              <div id="import-step-four" style="display: none">
-                <h5>
-                  Upload import file
-                  <gux-icon
-                    id="import-step-four-success-icon"
-                    icon-name="alert-success"
-                    class="alert-success"
-                    style="display: none"
-                    decorative
-                  ></gux-icon>
-                  <gux-icon
-                    id="import-step-four-fail-icon"
-                    icon-name="alert-warning-octogon"
-                    class="alert-danger"
-                    style="display: none"
-                    decorative
-                  ></gux-icon>
-                </h5>
-              </div>
-
-              <div id="import-step-five" style="display: none">
-                <h5>
-                  Import forecast
-                  <gux-icon
-                    id="import-step-five-success-icon"
-                    icon-name="alert-success"
-                    class="alert-success"
-                    style="display: none"
-                    decorative
-                  ></gux-icon>
-                  <gux-icon
-                    id="import-step-five-fail-icon"
-                    icon-name="alert-warning-octogon"
-                    class="alert-danger"
-                    style="display: none"
-                    decorative
-                  ></gux-icon>
-                </h5>
-              </div>
-            </div>
-            <div id="results-loading-message">
-              <gux-loading-message>
-                <div slot="primary-message">
-                  <h5>Preparing import file...</h5>
-                </div>
-                <gux-radial-progress
-                  slot="progress"
-                  screenreader-text="loading"
-                ></gux-radial-progress>
-                <div slot="additional-guidance">Thank you for waiting :)</div>
-              </gux-loading-message>
+            <div id="import-results-container">
+              <gux-table-beta>
+                <table slot="data" class="width">
+                  <thead>
+                    <tr>
+                      <th data-column-name="import-step">Step</th>
+                      <th data-column-name="status">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Subscribe to import notifications</td>
+                      <td id="import-step-one-status">Pending</td>
+                    </tr>
+                    <tr>
+                      <td>Prepare import file</td>
+                      <td id="import-step-two-status">Pending</td>
+                    </tr>
+                    <tr>
+                      <td>Generate upload URL</td>
+                      <td id="import-step-three-status">Pending</td>
+                    </tr>
+                    <tr>
+                      <td>Upload import file</td>
+                      <td id="import-step-four-status">Pending</td>
+                    </tr>
+                    <tr>
+                      <td>Import forecast</td>
+                      <td id="import-step-five-status">Pending</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </gux-table-beta>
             </div>
             <div id="import-success-div" style="display: none">
               <gux-card-beta
@@ -514,6 +435,7 @@
                 id="open-forecast-button"
                 accent="primary"
                 class="align-right"
+                style="display: none"
                 disabled
                 >Open</gux-button
               >

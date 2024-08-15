@@ -199,17 +199,6 @@ export function rotateDaysOfWeek() {
   applicationConfig.daysOfWeek = rotatedDays;
 }
 
-/*
-export function populateErrorMessage(error) {
-  const errorContainer = document.getElementById("import-fail-div");
-
-  let message = document.createElement("div");
-  message.className = "alert-danger";
-  message.innerHTML = error;
-  errorContainer.appendChild(message);
-}
-*/
-
 export function getNextWeekdayDate(startDate, weekday) {
   // Convert the startDate string to a Date object
   const date = new Date(startDate);
@@ -272,4 +261,34 @@ export function displayErrorCard(genereicMessage, specificMessage) {
 
   // Display the element
   errorDiv.style.display = "block";
+}
+
+export function updateStatusMessage(step, status) {
+  // Set icon properties
+  const iconName =
+    status === "success" ? "alert-success" : "alert-warning-octogon";
+  const iconClass = status === "success" ? "alert-success" : "alert-danger";
+
+  // Set message properties
+  const messageText = status === "success" ? "Done" : "Failed";
+
+  // Create gux-icon element
+  const icon = document.createElement("gux-icon");
+  icon.setAttribute("id", `import-step-${step}-icon`);
+  icon.setAttribute("icon-name", iconName);
+  icon.setAttribute("class", iconClass);
+  icon.setAttribute("decorative", "");
+
+  // Update the status message
+  const stepToUpdate = document.getElementById(`import-step-${step}-status`);
+  stepToUpdate.innerHTML = messageText;
+
+  // Apply the bulge animation
+  stepToUpdate.classList.add("bulge-animation");
+
+  // Remove the animation class after it completes to allow re-triggering
+  setTimeout(() => {
+    stepToUpdate.classList.remove("bulge-animation");
+    stepToUpdate.appendChild(icon);
+  }, 500); // Match the duration of the animation
 }

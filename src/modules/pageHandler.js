@@ -510,12 +510,6 @@ async function loadPageThree() {
     try {
       await importForecast();
 
-      // Hide loading spinner and show page four
-      hideLoadingSpinner(
-        "import-results-container",
-        "results-loading-message"
-      );
-
       // Add event listener for open forecast button
       addEvent(document.getElementById("open-forecast-button"), "click", () => {
         // Can't seem to make this work easily - button is disabled
@@ -609,26 +603,20 @@ function resetPageThree() {
 }
 
 function resetPageFour() {
-  // Reset all elements to display: none in the import results container
-  const elementsToReset = document.querySelectorAll(
-    "#import-results-container, #import-results-container *"
-  );
-  elementsToReset.forEach((element) => {
-    element.style.display = "none";
-  });
+  // Reset all status to Pending
+  document.getElementById("import-step-one-status").innerText = "Pending";
+  document.getElementById("import-step-two-status").innerText = "Pending";
+  document.getElementById("import-step-three-status").innerText = "Pending";
+  document.getElementById("import-step-four-status").innerText = "Pending";
+  document.getElementById("import-step-five-status").innerText = "Pending";
 
-  // Reset the loading spinner and message
-  updateLoadingMessage(
-    "results-loading-message",
-    "Subscribing to forecast import notifications..."
-  );
-  resetLoadingSpinner(
-    "import-results-container",
-    "results-loading-message"
-  );
+  // Hide success / fail card
+  document.getElementById("import-success-div").style.display = "none";
+  document.getElementById("import-fail-div").style.display = "none";
 
   // Reset open button to disabled
-  document.getElementById("open-forecast-button").disabled = true;
+  // Can't make this work easily - keep the button disabled for now
+  //document.getElementById("open-forecast-button").disabled = true;
 }
 
 function cleanUserInputs() {

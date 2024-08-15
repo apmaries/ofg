@@ -157,8 +157,8 @@ footer img {
   }
 }
 
-.bulge {
-  animation: bulge 0.5s;
+.bulge-animation {
+  animation: bulge 0.5s ease-in-out;
 }
 
 @keyframes flash {
