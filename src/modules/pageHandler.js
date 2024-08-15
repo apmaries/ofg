@@ -512,7 +512,7 @@ async function loadPageThree() {
 
       // Hide loading spinner and show page four
       hideLoadingSpinner(
-        "import-results-container-new",
+        "import-results-container",
         "results-loading-message"
       );
 
@@ -611,7 +611,7 @@ function resetPageThree() {
 function resetPageFour() {
   // Reset all elements to display: none in the import results container
   const elementsToReset = document.querySelectorAll(
-    "#import-results-container-new, #import-results-container-new *"
+    "#import-results-container, #import-results-container *"
   );
   elementsToReset.forEach((element) => {
     element.style.display = "none";
@@ -623,7 +623,7 @@ function resetPageFour() {
     "Subscribing to forecast import notifications..."
   );
   resetLoadingSpinner(
-    "import-results-container-new",
+    "import-results-container",
     "results-loading-message"
   );
 
