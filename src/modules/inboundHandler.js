@@ -90,12 +90,6 @@ async function handleAsyncForecastGeneration(buId) {
   console.log("[OFG.INBOUND] Handling async forecast generation");
   const topics = ["shorttermforecasts.generate"];
 
-  function onSubscriptionSuccess() {
-    console.log(
-      "[OFG.INBOUND] Successfully subscribed to forecast generate notifications"
-    );
-  }
-
   try {
     let generateNotifications = new NotificationHandler(
       topics,
@@ -106,6 +100,49 @@ async function handleAsyncForecastGeneration(buId) {
 
     generateNotifications.connect();
     generateNotifications.subscribeToNotifications();
+
+    function onSubscriptionSuccess() {
+      console.log(
+        "[OFG.INBOUND] Successfully subscribed to forecast generate notifications"
+      );
+    }
+
+    // Handle the inbound forecast notification
+    async function handleInboundForecastNotification(notification) {
+      // Check if "shorttermforecasts.generate" notification
+      if (!notification.topicName.includes("shorttermforecasts.generate")) {
+        return;
+      }
+
+      console.log("[OFG.INBOUND] Processing result from notification");
+
+      let generateOperationId = applicationConfig.inbound.operationId;
+
+      if (
+        notification.eventBody &&
+        notification.eventBody.operationId === generateOperationId
+      ) {
+        const status = notification.eventBody.status;
+        console.log(
+          `[OFG.INBOUND] Generate inbound forecast status updated <${status}>`
+        );
+
+        if (status === "Complete") {
+          const forecastId = notification.eventBody.result.id;
+          applicationConfig.inbound.inboundFcId = forecastId;
+          const inboundForecastData = await getInboundForecastData(forecastId);
+          await transformAndLoadInboundForecast(inboundForecastData);
+          generateNotifications.disconnect();
+        } else {
+          console.error(
+            "[OFG.INBOUND] Inbound forecast generation failed with status: ",
+            notification.eventBody
+          );
+          generateNotifications.disconnect();
+          throw new Error("Inbound forecast generation failed");
+        }
+      }
+    }
   } catch (error) {
     console.error(
       "[OFG.INBOUND] Error occurred while subscribing to notifications:",
@@ -130,42 +167,6 @@ async function handleAsyncForecastGeneration(buId) {
     window.addEventListener("inboundForecastComplete", handleComplete);
     window.addEventListener("inboundForecastError", handleError);
   });
-}
-
-// Handle the inbound forecast notification
-async function handleInboundForecastNotification(notification) {
-  // Check if "shorttermforecasts.generate" notification
-  if (!notification.topicName.includes("shorttermforecasts.generate")) {
-    return;
-  }
-
-  console.log("[OFG.INBOUND] Processing result from notification");
-
-  let generateOperationId = applicationConfig.inbound.operationId;
-
-  if (
-    notification.eventBody &&
-    notification.eventBody.operationId === generateOperationId
-  ) {
-    const status = notification.eventBody.status;
-    console.log(
-      `[OFG.INBOUND] Generate inbound forecast status updated <${status}>`
-    );
-
-    if (status === "Complete") {
-      const forecastId = notification.eventBody.result.id;
-      applicationConfig.inbound.inboundFcId = forecastId;
-      const inboundForecastData = await getInboundForecastData(forecastId);
-      await transformAndLoadInboundForecast(inboundForecastData);
-      window.dispatchEvent(
-        new CustomEvent("inboundForecastComplete", {
-          detail: inboundForecastData,
-        })
-      );
-    } else {
-      window.dispatchEvent(new CustomEvent("inboundForecastError"));
-    }
-  }
 }
 
 // Function to transform and load inbound forecast data

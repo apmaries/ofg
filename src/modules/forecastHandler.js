@@ -337,128 +337,6 @@ export async function importForecast() {
       return;
     }
 
-    // Handle the inbound forecast notification
-    async function handleImportNotification(notification) {
-      // Check if "shorttermforecasts.generate" notification
-      if (!notification.topicName.includes("shorttermforecasts.import")) {
-        return;
-      }
-
-      console.log("[OFG.IMPORT] Processing result from notification");
-
-      let importOperationId = applicationConfig.outbound.operationId;
-
-      if (
-        notification.eventBody &&
-        notification.eventBody.operationId === importOperationId
-      ) {
-        const status = notification.eventBody.status;
-        console.log(
-          `[OFG.INBOUND] Generate inbound forecast status updated <${status}>`
-        );
-
-        if (status === "Complete") {
-          const fcId = notification.eventBody.result.id;
-          // Get region from session storage
-          const region = sessionStorage.getItem("gc_region");
-
-          // Build the forecast URL
-          const fcUrl = `https://apps.${region}/directory/#/admin/wfm/forecasts/${buId}/update/${weekStart}${fcId}`;
-
-          applicationConfig.outbound.forecastId = fcId;
-          applicationConfig.outbound.fcUrl = fcUrl;
-
-          // Can't make this work easily - keep the button disabled for now
-          //document.getElementById("open-forecast-button").disabled = false;
-
-          updateStatusMessage("five", "success");
-          unhideElement("import-success-div");
-        } else if (status === "Error") {
-          const errorMessage = notification.metadata.errorInfo.userMessage;
-          updateStatusMessage("five", "failed");
-          displayErrorCard("Forecast import failed!", errorMessage);
-        }
-      }
-    }
-
-    // Run the import operation
-    async function runImport() {
-      updateLoadingMessage("import-loading-message", "Importing forecast...");
-
-      // STEP TWO - PREP FC IMPORT BODY
-      let fcImportBody, importGzip, contentLength;
-      try {
-        [fcImportBody, importGzip, contentLength] = await prepFcImportBody(
-          applicationState.forecastOutputs.modifiedForecast,
-          startDayOfWeek,
-          description
-        );
-        updateStatusMessage("two", "success");
-      } catch (prepError) {
-        updateStatusMessage("two", "failed");
-        displayErrorCard(
-          "Forecast import file preparation failed!",
-          prepError.message || prepError
-        );
-      }
-
-      // STEP THREE - GENERATE URL
-      let urlResponse;
-      try {
-        urlResponse = await generateUrl(buId, weekStart, contentLength);
-        updateStatusMessage("three", "success");
-      } catch (urlError) {
-        updateStatusMessage("three", "failed");
-        displayErrorCard(
-          "Forecast import URL generation failed!",
-          urlError.message || urlError
-        );
-      }
-
-      // STEP FOUR - UPLOAD FILE
-      let uploadResponse;
-      try {
-        uploadResponse = await invokeGCF(
-          urlResponse,
-          fcImportBody,
-          contentLength
-        );
-        updateStatusMessage("four", "success");
-      } catch (uploadError) {
-        updateStatusMessage("four", "failed");
-        displayErrorCard(
-          "Forecast import file upload failed!",
-          uploadError.message || uploadError
-        );
-      }
-
-      // STEP FIVE - IMPORT FC
-      let importResponse;
-      try {
-        importResponse = await importFc(buId, weekStart, urlResponse.uploadKey);
-
-        if (importResponse.status === "Complete") {
-          // Synchronous handling if the forecast is already complete
-          console.log("[OFG.IMPORT] Forecast import complete!");
-          applicationConfig.outbound.forecastId = importResponse.result.id;
-
-          updateStatusMessage("five", "success");
-          unhideElement("import-success-div");
-        } else if (importResponse.status === "Processing") {
-          // Asynchronous handling if the forecast is still processing
-          console.log("[OFG.IMPORT] Forecast import processing...");
-          applicationConfig.outbound.operationId = importResponse.operationId;
-          // Further operations handled via notification in handleImportNotification()
-        }
-      } catch (runImportError) {
-        unhideElement("import-step-five-fail-icon");
-        displayErrorCard(
-          "Forecast import failed!",
-          runImportError.message || runImportError
-        );
-      }
-    }
-
     // Subscribe to the import notification
     async function subscribe() {
       try {
@@ -472,6 +350,134 @@ export async function importForecast() {
         importNotifications.connect();
         importNotifications.subscribeToNotifications();
         updateStatusMessage("one", "success");
+
+        // Run the import operation
+        async function runImport() {
+          // STEP TWO - PREP FC IMPORT BODY
+          let fcImportBody, importGzip, contentLength;
+          try {
+            [fcImportBody, importGzip, contentLength] = await prepFcImportBody(
+              applicationState.forecastOutputs.modifiedForecast,
+              startDayOfWeek,
+              description
+            );
+            updateStatusMessage("two", "success");
+          } catch (prepError) {
+            updateStatusMessage("two", "failed");
+            displayErrorCard(
+              "Forecast import file preparation failed!",
+              prepError.message || prepError
+            );
+          }
+
+          // STEP THREE - GENERATE URL
+          let urlResponse;
+          try {
+            urlResponse = await generateUrl(buId, weekStart, contentLength);
+            updateStatusMessage("three", "success");
+          } catch (urlError) {
+            updateStatusMessage("three", "failed");
+            displayErrorCard(
+              "Forecast import URL generation failed!",
+              urlError.message || urlError
+            );
+          }
+
+          // STEP FOUR - UPLOAD FILE
+          let uploadResponse;
+          try {
+            uploadResponse = await invokeGCF(
+              urlResponse,
+              fcImportBody,
+              contentLength
+            );
+            updateStatusMessage("four", "success");
+          } catch (uploadError) {
+            updateStatusMessage("four", "failed");
+            displayErrorCard(
+              "Forecast import file upload failed!",
+              uploadError.message || uploadError
+            );
+          }
+
+          // STEP FIVE - IMPORT FC
+          let importResponse;
+          try {
+            importResponse = await importFc(
+              buId,
+              weekStart,
+              urlResponse.uploadKey
+            );
+
+            if (importResponse.status === "Complete") {
+              // Synchronous handling if the forecast is already complete
+              console.log("[OFG.IMPORT] Forecast import complete!");
+              applicationConfig.outbound.forecastId = importResponse.result.id;
+
+              updateStatusMessage("five", "success");
+              unhideElement("import-success-div");
+              importNotifications.disconnect();
+            } else if (importResponse.status === "Processing") {
+              // Asynchronous handling if the forecast is still processing
+              console.log("[OFG.IMPORT] Forecast import processing...");
+              applicationConfig.outbound.operationId =
+                importResponse.operationId;
+              // Further operations handled via notification in handleImportNotification()
+            }
+          } catch (runImportError) {
+            unhideElement("import-step-five-fail-icon");
+            displayErrorCard(
+              "Forecast import failed!",
+              runImportError.message || runImportError
+            );
+          }
+        }
+
+        // Handle the inbound forecast notification
+        async function handleImportNotification(notification) {
+          // Check if "shorttermforecasts.generate" notification
+          if (!notification.topicName.includes("shorttermforecasts.import")) {
+            return;
+          }
+
+          console.log("[OFG.IMPORT] Processing result from notification");
+
+          let importOperationId = applicationConfig.outbound.operationId;
+
+          if (
+            notification.eventBody &&
+            notification.eventBody.operationId === importOperationId
+          ) {
+            const status = notification.eventBody.status;
+            console.log(
+              `[OFG.INBOUND] Generate inbound forecast status updated <${status}>`
+            );
+
+            if (status === "Complete") {
+              const fcId = notification.eventBody.result.id;
+              // Get region from session storage
+              const region = sessionStorage.getItem("gc_region");
+
+              // Build the forecast URL
+              const fcUrl = `https://apps.${region}/directory/#/admin/wfm/forecasts/${buId}/update/${weekStart}${fcId}`;
+
+              applicationConfig.outbound.forecastId = fcId;
+              applicationConfig.outbound.fcUrl = fcUrl;
+
+              // Can't make this work easily - keep the button disabled for now
+              //document.getElementById("open-forecast-button").disabled = false;
+
+              updateStatusMessage("five", "success");
+              unhideElement("import-success-div");
+              importNotifications.disconnect();
+            } else if (status === "Error") {
+              const errorMessage = notification.metadata.errorInfo.userMessage;
+              updateStatusMessage("five", "failed");
+              displayErrorCard("Forecast import failed!", errorMessage);
+              importNotifications.disconnect();
+            }
+          }
+        }
       } catch (notificationError) {
         updateStatusMessage("one", "failed");
         displayErrorCard(

@@ -50,6 +50,18 @@ export class NotificationHandler {
     }
   }
 
+  disconnect() {
+    if (this.ws) {
+      this.ws.removeEventListener("open", this.onOpen.bind(this));
+      this.ws.removeEventListener("message", this.handleMessage.bind(this));
+      this.ws.removeEventListener("close", this.onClose.bind(this));
+      this.ws.removeEventListener("error", this.onError.bind(this));
+      this.ws.close();
+      this.ws = null;
+      console.log("[OFG.NOTIFICATIONS] WebSocket connection closed manually");
+    }
+  }
+
   onOpen(event) {
     console.log("[OFG.NOTIFICATIONS] WebSocket connection opened");
     // Add your code here
