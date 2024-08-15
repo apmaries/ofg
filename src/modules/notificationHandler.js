@@ -58,13 +58,11 @@ export class NotificationHandler {
       this.ws.removeEventListener("error", this.onError.bind(this));
       this.ws.close();
       this.ws = null;
-      console.log("[OFG.NOTIFICATIONS] WebSocket connection closed");
     }
   }
 
   onOpen(event) {
     console.log("[OFG.NOTIFICATIONS] WebSocket connection opened");
-    // Add your code here
   }
 
   subscribeToNotifications() {
