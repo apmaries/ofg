@@ -433,7 +433,7 @@ export async function importForecast() {
           }
         }
 
-        // Handle the inbound forecast notification
+        // Handle forecast notification
         async function handleImportNotification(notification) {
           // Check if "shorttermforecasts.generate" notification
           if (!notification.topicName.includes("shorttermforecasts.import")) {
