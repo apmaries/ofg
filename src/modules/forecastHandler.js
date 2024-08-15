@@ -296,15 +296,6 @@ export async function generateForecast() {
     try {
       await generateInboundForecast();
 
-      // Dispatch a custom event when the forecast generation is complete
-      const event = new CustomEvent("inboundForecastComplete", {
-        detail: {
-          retainInbound:
-            applicationState.userInputs.forecastOptions.retainInbound,
-        },
-      });
-      window.dispatchEvent(event);
-
       console.info("[OFG.GENERATE] Inbound groups processed");
     } catch (inboundError) {
       displayErrorCard(
