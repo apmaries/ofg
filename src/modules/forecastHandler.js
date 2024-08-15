@@ -358,7 +358,9 @@ export async function importForecast() {
           applicationConfig.outbound.forecastId = fcId;
           applicationConfig.outbound.fcUrl = fcUrl;
 
-          document.getElementById("open-forecast-button").disabled = false;
+          // Can't make this work easily - keep the button disabled for now
+          //document.getElementById("open-forecast-button").disabled = false;
+
           unhideElement("import-step-five-success-icon");
           unhideElement("import-success-div");
         } else if (status === "Error") {
