@@ -133,13 +133,21 @@ async function handleAsyncForecastGeneration(buId) {
           const inboundForecastData = await getInboundForecastData(forecastId);
           await transformAndLoadInboundForecast(inboundForecastData);
           generateNotifications.disconnect();
-        } else {
+        } else if (status === "Processing") {
+          console.log(
+            "[OFG.INBOUND] Inbound forecast generation is still processing."
+          );
+          // Any additional logic needed?
+        } else if (status === "Error") {
           console.error(
             "[OFG.INBOUND] Inbound forecast generation failed with status: ",
             notification.eventBody
           );
           generateNotifications.disconnect();
           throw new Error("Inbound forecast generation failed");
+        } else {
+          // Handle unknown status if necessary
+          console.warn("[OFG.INBOUND] Received unknown status: ", status);
         }
       }
     }
@@ -150,23 +158,6 @@ async function handleAsyncForecastGeneration(buId) {
     );
     throw new Error("Inbound forecast generation failed: " + error.message);
   }
-
-  return new Promise((resolve, reject) => {
-    const handleComplete = (event) => {
-      window.removeEventListener("inboundForecastComplete", handleComplete);
-      window.removeEventListener("inboundForecastError", handleError);
-      resolve(event.detail);
-    };
-
-    const handleError = (event) => {
-      window.removeEventListener("inboundForecastComplete", handleComplete);
-      window.removeEventListener("inboundForecastError", handleError);
-      reject(new Error("Inbound forecast generation failed"));
-    };
-
-    window.addEventListener("inboundForecastComplete", handleComplete);
-    window.addEventListener("inboundForecastError", handleError);
-  });
 }
 
 // Function to transform and load inbound forecast data
