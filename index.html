@@ -268,87 +268,98 @@
                 <div slot="additional-guidance">Thank you for waiting.</div>
               </gux-loading-message>
             </div>
-            <div id="forecast-outputs-container" style="display: none">
-              <gux-form-field-dropdown class="width">
-                <gux-dropdown id="planning-group-dropdown" disabled>
-                  <gux-listbox id="planning-group-listbox"> </gux-listbox>
-                </gux-dropdown>
-                <label slot="label">Planning Group</label>
-              </gux-form-field-dropdown>
-              <gux-form-field-dropdown class="width">
-                <gux-dropdown id="week-day-dropdown" disabled>
-                  <gux-listbox id="week-day-listbox"> </gux-listbox>
-                </gux-dropdown>
-                <label slot="label">Day of Week</label>
-              </gux-form-field-dropdown>
-              <div id="chart"></div>
-              <div id="totals-table" hidden>
-                <gux-table-beta>
-                  <table slot="data">
-                    <thead>
-                      <tr>
-                        <th data-column-name="totals-interval">Total for</th>
-                        <th data-column-name="forecast-offered">
-                          Forecast Offered
-                        </th>
-                        <th data-column-name="forecast-aht">Forecast AHT</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr id="fc-day-tr">
-                        <td id="fc-day-tr-heading">Day</td>
-                        <td id="fc-day-offered">0</td>
-                        <td id="fc-day-aht">0</td>
-                      </tr>
-                      <tr id="fc-week-tr">
-                        <td>Week</td>
-                        <td id="fc-week-offered">0</td>
-                        <td id="fc-week-aht">0</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </gux-table-beta>
-              </div>
-              <div id="controls" hidden>
-                <gux-form-field-dropdown>
-                  <gux-dropdown
-                    id="metric-select"
-                    placeholder="Select a Metric"
-                  >
-                    <gux-listbox>
-                      <gux-option value="offered">Offered</gux-option>
-                      <gux-option value="aver-handle-time"
-                        >Average Handle Time</gux-option
-                      >
-                      <gux-option value="both">Both</gux-option>
-                    </gux-listbox>
-                  </gux-dropdown>
-                  <label slot="label">Metric</label>
-                </gux-form-field-dropdown>
+            <div id="forecast-outputs-container">
+              <gux-accordion>
+                <gux-accordion-section>
+                  <h4 slot="header">Modifications</h4>
+                  <div slot="content">
+                    <gux-form-field-dropdown class="width">
+                      <gux-dropdown id="planning-group-dropdown" disabled>
+                        <gux-listbox id="planning-group-listbox"> </gux-listbox>
+                      </gux-dropdown>
+                      <label slot="label">Planning Group</label>
+                    </gux-form-field-dropdown>
+                    <gux-form-field-dropdown class="width">
+                      <gux-dropdown id="week-day-dropdown" disabled>
+                        <gux-listbox id="week-day-listbox"> </gux-listbox>
+                      </gux-dropdown>
+                      <label slot="label">Day of Week</label>
+                    </gux-form-field-dropdown>
+                    <div id="chart"></div>
+                    <div id="totals-table" hidden>
+                      <gux-table-beta>
+                        <table slot="data">
+                          <thead>
+                            <tr>
+                              <th data-column-name="totals-interval">
+                                Total for
+                              </th>
+                              <th data-column-name="forecast-offered">
+                                Forecast Offered
+                              </th>
+                              <th data-column-name="forecast-aht">
+                                Forecast AHT
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr id="fc-day-tr">
+                              <td id="fc-day-tr-heading">Day</td>
+                              <td id="fc-day-offered">0</td>
+                              <td id="fc-day-aht">0</td>
+                            </tr>
+                            <tr id="fc-week-tr">
+                              <td>Week</td>
+                              <td id="fc-week-offered">0</td>
+                              <td id="fc-week-aht">0</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </gux-table-beta>
+                    </div>
+                    <div id="controls" hidden>
+                      <gux-form-field-dropdown>
+                        <gux-dropdown
+                          id="metric-select"
+                          placeholder="Select a Metric"
+                        >
+                          <gux-listbox>
+                            <gux-option value="offered">Offered</gux-option>
+                            <gux-option value="aver-handle-time"
+                              >Average Handle Time</gux-option
+                            >
+                            <gux-option value="both">Both</gux-option>
+                          </gux-listbox>
+                        </gux-dropdown>
+                        <label slot="label">Metric</label>
+                      </gux-form-field-dropdown>
 
-                <gux-button id="smooth-button" accent="tertiary"
-                  >Smooth
-                  <gux-tooltip>
-                    Smooth with 3 point moving average
-                  </gux-tooltip></gux-button
-                >
-                <gux-button id="trendline-button" accent="tertiary"
-                  >Trendline
-                  <gux-tooltip>
-                    Create a trendline using linear regression
-                  </gux-tooltip></gux-button
-                >
-                <gux-button id="flatten-button" accent="tertiary"
-                  >Flatten<gux-tooltip>
-                    Flatten to single value
-                  </gux-tooltip></gux-button
-                >
-                <gux-button id="reset-button" accent="danger"
-                  >Reset<gux-tooltip>
-                    Reset back to original values
-                  </gux-tooltip></gux-button
-                >
-              </div>
+                      <gux-button id="smooth-button" accent="tertiary"
+                        >Smooth
+                        <gux-tooltip>
+                          Smooth with 3 point moving average
+                        </gux-tooltip></gux-button
+                      >
+                      <gux-button id="trendline-button" accent="tertiary"
+                        >Trendline
+                        <gux-tooltip>
+                          Create a trendline using linear regression
+                        </gux-tooltip></gux-button
+                      >
+                      <gux-button id="flatten-button" accent="tertiary"
+                        >Flatten<gux-tooltip>
+                          Flatten to single value
+                        </gux-tooltip></gux-button
+                      >
+                      <gux-button id="reset-button" accent="danger"
+                        >Reset<gux-tooltip>
+                          Reset back to original values
+                        </gux-tooltip></gux-button
+                      >
+                    </div>
+                  </div>
+                </gux-accordion-section>
+              </gux-accordion>
             </div>
             <div id="page-three-buttons" class="row" style="padding-top: 20px">
               <gux-button
