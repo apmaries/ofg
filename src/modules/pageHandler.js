@@ -524,25 +524,22 @@ async function loadPageThree() {
         );
 
         try {
-          const newWindow = window.open(
-            applicationConfig.outbound.fcUrl,
-            "_blank"
-          );
-          if (!newWindow) {
-            throw new Error(
-              "Failed to open new window. It might be blocked by a pop-up blocker."
-            );
-          }
+          // Create an anchor element
+          const anchor = document.createElement("a");
+          anchor.href = applicationConfig.outbound.fcUrl;
+          anchor.target = "_blank";
+          anchor.style.display = "none"; // Hide the anchor element
+
+          // Append the anchor to the body
+          document.body.appendChild(anchor);
+
+          // Trigger a click event on the anchor
+          anchor.click();
+
+          // Remove the anchor from the body
+          document.body.removeChild(anchor);
         } catch (error) {
           console.error("[OFG] An error occurred:", error);
-          errorManager.logError({
-            Source:
-              "https://apmaries.github.io/sandpit-testing/src/modules/pageHandler.js",
-            Line: 527,
-            Column: 0,
-            URL: "https://apmaries.github.io/sandpit-testing/index.html",
-            ErrorObject: error,
-          });
         }
       });
     } catch (error) {
