@@ -13,8 +13,6 @@ This project is an outbound forecast generator for Genesys Cloud that helps busi
 
 ## Set up
 
-## Set up
-
 1. OAuth Client
    1.1. Go to the OAuth client creation page in your Genesys Cloud account.
    1.2. Click on "Create New Client".
