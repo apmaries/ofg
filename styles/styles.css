@@ -6,21 +6,30 @@ body {
   justify-content: center;
   align-items: center;
   width: 500px;
+  border: #155724 solid 1px;
 }
 
-body > div {
-  width: 95%; /* Apply the width to the div */
+#widget-container {
+  width: 98%; /* Apply the width to the div */
   flex: 1 0 auto; /* This will make the div take up all available space */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center; /* Center children horizontally */
 }
+
 main {
   display: none;
+  width: 100%;
   flex: 1;
 }
 
 fieldset {
-  width: 95%;
+  width: 100%;
   max-width: 450px;
   box-sizing: border-box;
+  margin: 0 auto; /* Center fieldset within its container */
 }
 
 fieldset > div > div {
@@ -54,14 +63,6 @@ footer img {
 
 #loading-section {
   display: block;
-}
-
-.widget-container {
-  max-width: 95%; /* Set the maximum width as needed */
-  margin: 0 auto; /* Center the widget within the parent container */
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
 }
 
 .form-container {
