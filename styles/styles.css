@@ -2,13 +2,16 @@ html,
 body {
   height: 100%;
   margin: 0;
-  max-width: 450px; /* temp: Set the maximum width as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
 }
 
 body > div {
+  width: 95%; /* Apply the width to the div */
   flex: 1 0 auto; /* This will make the div take up all available space */
 }
-
 main {
   display: none;
   flex: 1;
