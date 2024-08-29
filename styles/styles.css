@@ -5,8 +5,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 500px;
-  border: #155724 solid 1px;
+  width: 495px;
 }
 
 #widget-container {
@@ -17,6 +16,14 @@ body {
   min-height: 100vh;
   justify-content: center;
   align-items: center; /* Center children horizontally */
+}
+
+#heading-div {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  margin-left: 15px;
+  margin-bottom: 15px;
 }
 
 main {
