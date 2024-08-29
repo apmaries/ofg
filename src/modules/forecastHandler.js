@@ -325,6 +325,7 @@ export async function importForecast() {
 
       // Build the forecast URL
       const fcUrl = `https://apps.${region}/directory/#/admin/wfm/forecasts/${buId}/update/${weekStart}${fcId}`;
+      applicationConfig.outbound.fcUrl = fcUrl;
 
       unhideElement("import-success-div");
       document.getElementById("open-forecast-button").disabled = false;
