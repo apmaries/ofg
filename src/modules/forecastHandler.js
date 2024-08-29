@@ -319,16 +319,13 @@ export async function importForecast() {
     async function importSuccess() {
       // Get region from session storage
       const region = sessionStorage.getItem("gc_region");
-      console.log("[OFG.IMPORT] Region:", region);
 
       // Get the forecast ID from application config
       const fcId = applicationConfig.outbound.forecastId;
-      console.log("[OFG.IMPORT] Forecast ID:", fcId);
 
       // Build the forecast URL
       const fcUrl = `https://apps.${region}/directory/#/admin/wfm/forecasts/${buId}/update/${weekStart}${fcId}`;
       applicationConfig.outbound.fcUrl = fcUrl;
-      console.log("[OFG.IMPORT] Forecast URL:", fcUrl);
 
       unhideElement("import-success-div");
       document.getElementById("open-forecast-button").disabled = false;
@@ -477,9 +474,7 @@ export async function importForecast() {
 
             if (status === "Complete") {
               const asyncFcId = notification.eventBody.result.id;
-
               applicationConfig.outbound.forecastId = asyncFcId;
-              applicationConfig.outbound.fcUrl = fcUrl;
 
               updateStatusMessage("five", "success");
               await importSuccess();
