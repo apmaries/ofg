@@ -45,6 +45,7 @@ fieldset > div > div {
 
 gux-button {
   width: 100px;
+  padding: 5px;
 }
 
 gux-tooltip {
@@ -83,6 +84,11 @@ footer img {
   font-size: 12px;
   line-height: 16px;
   margin-bottom: 8px;
+}
+
+#contols-buttons-div {
+  display: flex;
+  justify-content: space-between;
 }
 
 .error {
