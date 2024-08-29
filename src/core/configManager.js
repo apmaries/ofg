@@ -20,13 +20,12 @@ let applicationConfig = {
   },
   testMode: window.location.protocol !== "https:",
   testing: {
-    outboundAggregatesDataUrl:
-      "/sandpit-testing/test/outboundAggregateData.json",
-    businessUnitsUrl: "/sandpit-testing/test/businessUnits.json",
-    businessUnitSettingsUrl: "/sandpit-testing/test/bu.json",
-    planningGroupsUrl: "/sandpit-testing/test/planningGroups.json",
-    campaignsUrl: "/sandpit-testing/test/campaigns.json",
-    inboundFcDataUrl: "/sandpit-testing/test/inboundForecastData.json",
+    outboundAggregatesDataUrl: "/test/outboundAggregateData.json",
+    businessUnitsUrl: "/test/businessUnits.json",
+    businessUnitSettingsUrl: "/test/bu.json",
+    planningGroupsUrl: "/test/planningGroups.json",
+    campaignsUrl: "/test/campaigns.json",
+    inboundFcDataUrl: "/test/inboundForecastData.json",
   },
   // Add more configuration options as needed
 };
