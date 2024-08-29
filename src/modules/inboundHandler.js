@@ -180,9 +180,7 @@ async function handleAsyncForecastGeneration(buId) {
           notification.eventBody.operationId === generateOperationId
         ) {
           const status = notification.eventBody.status;
-          console.log(
-            `[OFG.INBOUND] Generate inbound forecast status updated <${status}>`
-          );
+          console.log(`[OFG.INBOUND] Forecast status = <${status}>`);
 
           if (status === "Complete") {
             const forecastId = notification.eventBody.result.id;
@@ -204,9 +202,6 @@ async function handleAsyncForecastGeneration(buId) {
 
             resolve(); // Resolve the promise when complete
           } else if (status === "Processing") {
-            console.log(
-              "[OFG.INBOUND] Inbound forecast generation is still processing."
-            );
             // Any additional logic needed?
           } else if (status === "Error") {
             console.error(
