@@ -219,7 +219,7 @@ export async function executeQueries(body, intervals) {
       console.warn("[OFG.QUERY] No results found");
 
       // Get test results for testing in prod
-      results = await fetch("/test/outboundAggregateData_prod.json")
+      results = await fetch("../../test/outboundAggregateData_prod.json")
         .then((response) => response.json())
         .then((data) => data.results)
         .catch((error) =>
