@@ -113,7 +113,7 @@ export async function populateGraphAndTable(data) {
 
   let vegaSpec = {
     "$schema": "https://vega.github.io/schema/vega/v5.json",
-    "width": 350,
+    "width": 300,
     "height": 360,
     "padding": 5,
 
