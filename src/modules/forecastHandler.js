@@ -316,6 +316,20 @@ export async function importForecast() {
     const startDayOfWeek =
       applicationState.userInputs.businessUnit.settings.startDayOfWeek;
 
+    async function importSuccess() {
+      // Get region from session storage
+      const region = sessionStorage.getItem("gc_region");
+
+      // Get the forecast ID from application config
+      const fcId = applicationConfig.outbound.forecastId;
+
+      // Build the forecast URL
+      const fcUrl = `https://apps.${region}/directory/#/admin/wfm/forecasts/${buId}/update/${weekStart}${fcId}`;
+
+      unhideElement("import-success-div");
+      document.getElementById("open-forecast-button").disabled = false;
+    }
+
     if (testMode) {
       function delayUpdate(step, status, delay) {
         return new Promise((resolve) => {
@@ -335,9 +349,8 @@ export async function importForecast() {
       }
 
       await updateAllStatusMessages();
-      unhideElement("import-success-div");
-      // Can't make this work easily - keep the button disabled for now
-      //document.getElementById("open-forecast-button").disabled = false;
+      await importSuccess();
+
       return;
     }
 
@@ -416,10 +429,11 @@ export async function importForecast() {
             if (importResponse.status === "Complete") {
               // Synchronous handling if the forecast is already complete
               console.log("[OFG.IMPORT] Forecast import complete!");
-              applicationConfig.outbound.forecastId = importResponse.result.id;
+              const syncFcId = importResponse.result.id;
+              applicationConfig.outbound.forecastId = syncFcId;
 
               updateStatusMessage("five", "success");
-              unhideElement("import-success-div");
+              await importSuccess();
               importNotifications.disconnect();
             } else if (importResponse.status === "Processing") {
               // Asynchronous handling if the forecast is still processing
@@ -458,21 +472,13 @@ export async function importForecast() {
             );
 
             if (status === "Complete") {
-              const fcId = notification.eventBody.result.id;
-              // Get region from session storage
-              const region = sessionStorage.getItem("gc_region");
+              const asyncFcId = notification.eventBody.result.id;
 
-              // Build the forecast URL
-              const fcUrl = `https://apps.${region}/directory/#/admin/wfm/forecasts/${buId}/update/${weekStart}${fcId}`;
-
-              applicationConfig.outbound.forecastId = fcId;
+              applicationConfig.outbound.forecastId = asyncFcId;
               applicationConfig.outbound.fcUrl = fcUrl;
 
-              // Can't make this work easily - keep the button disabled for now
-              //document.getElementById("open-forecast-button").disabled = false;
-
               updateStatusMessage("five", "success");
-              unhideElement("import-success-div");
+              await importSuccess();
               importNotifications.disconnect();
             } else if (status === "Error") {
               const errorMessage = notification.metadata.errorInfo.userMessage;
