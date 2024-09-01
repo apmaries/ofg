@@ -7,7 +7,7 @@ This project is an outbound forecast generator for Genesys Cloud that helps busi
 ## Features
 
 - Historical data analysis
-- Forecast generation
+- Forecast generation based on successful contact rate
 - Customizable parameters
 - User-friendly interface
 
