@@ -49,3 +49,7 @@ This project is an outbound forecast generator for Genesys Cloud that helps busi
 ## Assumptions
 
 1. Queues are used to link Outbound Campaigns to WFM Planning Groups - application supports 1:1 mapping of queue to campaign only.
+
+## Kown bugs
+
+1. Import sometimes fails on many modifications
