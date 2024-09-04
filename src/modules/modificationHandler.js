@@ -472,7 +472,10 @@ async function applyModification(data, modToRun) {
   let tHandle = modifiedData.fcValues.tHandle;
 
   console.debug("[OFG.TEMP] Applying modification", modToRun.name);
-  console.debug("[OFG.TEMP] Data before modification", modifiedData);
+  console.debug(
+    "[OFG.TEMP] Data before modification",
+    JSON.parse(JSON.stringify(modifiedData))
+  );
 
   // Calculate totals
   let { dailyTotals: nContactsDailyTotals, weeklyTotal: nContactsWeeklyTotal } =
