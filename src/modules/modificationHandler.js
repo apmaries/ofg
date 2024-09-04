@@ -471,6 +471,9 @@ async function applyModification(data, modToRun) {
   let nHandled = modifiedData.fcValues.nHandled;
   let tHandle = modifiedData.fcValues.tHandle;
 
+  console.debug("[OFG.TEMP] Applying modification", modToRun.name);
+  console.debug("[OFG.TEMP] Data before modification", modifiedData);
+
   // Calculate totals
   let { dailyTotals: nContactsDailyTotals, weeklyTotal: nContactsWeeklyTotal } =
     calculateTotals(nContacts);
@@ -551,6 +554,8 @@ async function applyModification(data, modToRun) {
 
       // Replace the original values with the modified values
       modifiedData.fcValues.nContacts[selectedWeekDay] = modifiedValues;
+
+      console.debug("[OFG.TEMP] Data after modification", modifiedData);
     }
 
     if (metricSelect === "aver-handle-time" || metricSelect === "both") {
@@ -583,6 +588,8 @@ async function applyModification(data, modToRun) {
 
       // Replace the original values with the modified values
       modifiedData.fcValues.tHandle[selectedWeekDay] = modifiedValues;
+
+      console.debug("[OFG.TEMP] Data after modification", modifiedData);
     }
   }
 
