@@ -469,7 +469,7 @@ export async function importForecast() {
           ) {
             const status = notification.eventBody.status;
             console.log(
-              `[OFG.INBOUND] Generate inbound forecast status updated <${status}>`
+              `[OFG.IMPORT] Generate inbound forecast status updated <${status}>`
             );
 
             if (status === "Complete") {
@@ -483,6 +483,10 @@ export async function importForecast() {
               const errorMessage = notification.metadata.errorInfo.userMessage;
               updateStatusMessage("five", "failed");
               displayErrorCard("Forecast import failed!", errorMessage);
+              console.error(
+                "[OFG.IMPORT] Forecast import failed:",
+                errorMessage
+              );
               importNotifications.disconnect();
             }
           }
