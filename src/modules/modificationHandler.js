@@ -591,6 +591,7 @@ async function applyModification(data, modToRun) {
 
 // Function to smooth data
 function smoothData(data) {
+  console.debug("[OFG.TEMP] Smoothing data", data);
   // Extract the subrange of non-zero values for the selected weekday
   let { subrange, start_index, end_index } = extractSubrange(data);
 
@@ -613,6 +614,7 @@ function smoothData(data) {
     smoothedData[i] = smoothedSubrange[i - start_index];
   }
 
+  console.debug("[OFG.TEMP] Smoothed data", smoothedData);
   return smoothedData;
 }
 
