@@ -516,13 +516,6 @@ async function loadPageThree() {
 
       // Add event listener for open forecast button
       addEvent(document.getElementById("open-forecast-button"), "click", () => {
-        // Can't seem to make this work easily - button is disabled
-        // temp logging
-        console.log(
-          "[OFG.TEMP] Open forecast button clicked",
-          applicationConfig.outbound.fcUrl
-        );
-
         try {
           // Create an anchor element
           const anchor = document.createElement("a");
