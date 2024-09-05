@@ -471,12 +471,6 @@ async function applyModification(data, modToRun) {
   let nHandled = modifiedData.fcValues.nHandled;
   let tHandle = modifiedData.fcValues.tHandle;
 
-  console.debug("[OFG.TEMP] Applying modification", modToRun.name);
-  console.debug(
-    "[OFG.TEMP] Data before modification",
-    JSON.parse(JSON.stringify(modifiedData))
-  );
-
   // Calculate totals
   let { dailyTotals: nContactsDailyTotals, weeklyTotal: nContactsWeeklyTotal } =
     calculateTotals(nContacts);
@@ -490,10 +484,6 @@ async function applyModification(data, modToRun) {
     let modifiedTotals;
 
     if (metricSelect === "offered" || metricSelect === "both") {
-      console.debug(
-        `[OFG.MODIFICATIONS] Modifying Offered with ${modToRun.name}`,
-        nContactsDailyTotals
-      );
       try {
         // Run modification function on nContacts
         modifiedTotals = modToRun(nContactsDailyTotals);
@@ -515,11 +505,6 @@ async function applyModification(data, modToRun) {
     }
 
     if (metricSelect === "aver-handle-time" || metricSelect === "both") {
-      console.debug(
-        `[OFG.MODIFICATIONS] Modifying AHT with ${modToRun.name}`,
-        nContactsDailyTotals
-      );
-
       try {
         // Run modification function on nHandled
         modifiedTotals = modToRun(nHandledDailyTotals);
@@ -557,22 +542,11 @@ async function applyModification(data, modToRun) {
 
       // Replace the original values with the modified values
       modifiedData.fcValues.nContacts[selectedWeekDay] = modifiedValues;
-
-      console.debug("[OFG.TEMP] Data after modification", modifiedData);
     }
 
     if (metricSelect === "aver-handle-time" || metricSelect === "both") {
       // Run modification function on nHandled
       modifiedValues = modToRun(nHandled[selectedWeekDay]);
-
-      /*
-      // Not currently being used for AHT mods - totals should be impacted... allow user to specify?
-      // Maintain the original sums
-      modifiedValues = maintainOriginalSum(
-        modifiedValues,
-        nHandledDailyTotals[selectedWeekDay]
-      );
-      */
 
       // Replace the original values with the modified values
       modifiedData.fcValues.nHandled[selectedWeekDay] = modifiedValues;
@@ -580,19 +554,8 @@ async function applyModification(data, modToRun) {
       // Run modification function on tHandle
       modifiedValues = modToRun(tHandle[selectedWeekDay]);
 
-      /*
-      // Not currently being used for AHT mods - totals should be impacted... allow user to specify?
-      // Maintain the original sums
-      modifiedValues = maintainOriginalSum(
-        modifiedValues,
-        tHandleDailyTotals[selectedWeekDay]
-      );
-      */
-
       // Replace the original values with the modified values
       modifiedData.fcValues.tHandle[selectedWeekDay] = modifiedValues;
-
-      console.debug("[OFG.TEMP] Data after modification", modifiedData);
     }
   }
 
@@ -773,11 +736,7 @@ function updateModifiedForecast(modifiedData) {
   if (metricSelect === "offered" || metricSelect === "both") {
     let nContactsModified = modifiedData.fcValues.nContacts;
     if (weeklyMode) {
-      modifiedPgForecast.forecastData.nContacts = nContactsModified.map(
-        (day, i) => {
-          return [...modifiedPgForecast.forecastData.nContacts[i], ...day];
-        }
-      );
+      modifiedPgForecast.forecastData.nContacts = nContactsModified;
     } else {
       modifiedPgForecast.forecastData.nContacts[selectedWeekDay] =
         nContactsModified[selectedWeekDay];
@@ -787,25 +746,13 @@ function updateModifiedForecast(modifiedData) {
     let nHandledModified = modifiedData.fcValues.nHandled;
     let tHandleModified = modifiedData.fcValues.tHandle;
     if (weeklyMode) {
-      modifiedPgForecast.forecastData.nHandled = nHandledModified.map(
-        (day, i) => {
-          return [...modifiedPgForecast.forecastData.nHandled[i], ...day];
-        }
-      );
-      modifiedPgForecast.forecastData.tHandle = tHandleModified.map(
-        (day, i) => {
-          return [...modifiedPgForecast.forecastData.tHandle[i], ...day];
-        }
-      );
+      modifiedPgForecast.forecastData.nHandled = nHandledModified;
+      modifiedPgForecast.forecastData.tHandle = tHandleModified;
     } else {
-      modifiedPgForecast.forecastData.nHandled[selectedWeekDay] = [
-        ...modifiedPgForecast.forecastData.nHandled[selectedWeekDay],
-        ...nHandledModified[selectedWeekDay],
-      ];
-      modifiedPgForecast.forecastData.tHandle[selectedWeekDay] = [
-        ...modifiedPgForecast.forecastData.tHandle[selectedWeekDay],
-        ...tHandleModified[selectedWeekDay],
-      ];
+      modifiedPgForecast.forecastData.nHandled[selectedWeekDay] =
+        nHandledModified[selectedWeekDay];
+      modifiedPgForecast.forecastData.tHandle[selectedWeekDay] =
+        tHandleModified[selectedWeekDay];
     }
   }
 }
