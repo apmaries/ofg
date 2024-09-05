@@ -33,6 +33,8 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     const planningGroup = group.planningGroup;
     const forecastData = group.forecastData;
 
+    console.debug("[OFG.TEMP] Processing planning group: ", group);
+
     if (!forecastData) {
       console.warn(
         `[OFG.IMPORT] [${planningGroup.name}] No forecast data found`
