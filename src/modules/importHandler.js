@@ -97,9 +97,9 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     planningGroupsArray.push(pgObj);
   }
 
+  // Create the forecast import body
   let fcImportBody;
   try {
-    // Create the forecast import body
     fcImportBody = {
       "description": description,
       "weekCount": 1,
@@ -113,10 +113,12 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     throw bodyError;
   }
 
+  console.debug("[OFG.TEMP] Forecast import body: ", fcImportBody);
+
+  // Gzip encode the body
   let fcImportGzip;
   let contentLengthBytes;
   try {
-    // Gzip encode the body
     fcImportGzip = gzipEncode(fcImportBody);
     contentLengthBytes = fcImportGzip.length;
   } catch (gzipError) {
