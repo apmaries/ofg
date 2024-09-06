@@ -332,6 +332,20 @@ export async function importForecast() {
     }
 
     if (testMode) {
+      let fcImportBody, importGzip, contentLength;
+      try {
+        [fcImportBody, importGzip, contentLength] = await prepFcImportBody(
+          applicationState.forecastOutputs.modifiedForecast,
+          startDayOfWeek,
+          description
+        );
+      } catch (prepError) {
+        displayErrorCard(
+          "Forecast import file preparation failed!",
+          prepError.message || prepError
+        );
+      }
+
       function delayUpdate(step, status, delay) {
         return new Promise((resolve) => {
           setTimeout(() => {
