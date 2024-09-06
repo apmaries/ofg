@@ -229,7 +229,7 @@ export async function executeQueries(body, intervals) {
         );
 
       console.info(
-        "%c[OFG.QUERY] Test data in prod retrieval successful",
+        "%c[OFG.TEST] Test data in prod retrieval successful",
         "color: red"
       );
     } else {

@@ -238,7 +238,7 @@ export async function generateInboundForecast() {
   if (testMode) {
     const inboundForecastData = await getInboundForecastData();
     console.log(
-      "%c[OFG.INBOUND] Forecast data loaded from test data",
+      "%c[OFG.TEST] Forecast data loaded from test data",
       "color: red",
       inboundForecastData
     );

@@ -14,6 +14,11 @@ import { calculateWeightedAverages } from "./numberHandler.js";
 export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
   console.info("[OFG.IMPORT] Preparing forecast import body");
 
+  // Get id of BU start day of week
+  const daysOfWeek = applicationConfig.daysOfWeek;
+  const buStartDay = daysOfWeek.find((day) => day.name === buStartDayOfWeek);
+  const buStartDayId = parseInt(buStartDay.id);
+
   // Function to gzip encode the body
   function gzipEncode(body) {
     const encoder = new TextEncoder();
@@ -33,8 +38,6 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     const planningGroup = group.planningGroup;
     const forecastData = group.forecastData;
 
-    console.debug("[OFG.TEMP] Processing planning group: ", group);
-
     if (!forecastData) {
       console.warn(
         `[OFG.IMPORT] [${planningGroup.name}] No forecast data found`
@@ -53,18 +56,11 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     const weightedAverages = calculateWeightedAverages(tHandle, nHandled);
     const aHandleTime = weightedAverages.intervalAverages;
 
-    const daysOfWeek = applicationConfig.daysOfWeek;
-
-    const dayOfWeekFiltered = daysOfWeek.filter((day) => day.id !== "99");
-    const buStartDayIndex = dayOfWeekFiltered.findIndex(
-      (day) => day.name === buStartDayOfWeek
-    );
-
     const nContactsReordered = [];
     const aHandleTimeReordered = [];
 
     for (let i = 0; i < nContacts.length; i++) {
-      const index = (buStartDayIndex + i) % 7;
+      const index = (buStartDayId + i) % 7;
       nContactsReordered.push(nContacts[index]);
       aHandleTimeReordered.push(aHandleTime[index]);
     }
@@ -114,8 +110,6 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     );
     throw bodyError;
   }
-
-  console.debug("[OFG.TEMP] Forecast import body: ", fcImportBody);
 
   // Gzip encode the body
   let fcImportGzip;

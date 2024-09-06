@@ -45,7 +45,7 @@ export async function startApp() {
 
   if (testMode) {
     // Initialize test mode
-    console.log("%c[OFG] Test mode enabled", "color: red");
+    console.log("%c[OFG.TEST] Test mode enabled", "color: red");
 
     await initializeTestMode();
   } else {

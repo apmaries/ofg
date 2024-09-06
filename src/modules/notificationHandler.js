@@ -70,7 +70,7 @@ export class NotificationHandler {
 
     if (testMode) {
       console.log(
-        "%c[OFG.NOTIFICATIONS] Skipping subscription in test mode",
+        "%c[OFG.TEST] Skipping subscription in test mode",
         "color: red"
       );
       return;

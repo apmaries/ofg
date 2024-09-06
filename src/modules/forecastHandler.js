@@ -339,6 +339,11 @@ export async function importForecast() {
           startDayOfWeek,
           description
         );
+        console.log(
+          "%c[OFG.TEST] Forecast import body prepared",
+          "color: red",
+          fcImportBody
+        );
       } catch (prepError) {
         displayErrorCard(
           "Forecast import file preparation failed!",
