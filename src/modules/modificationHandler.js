@@ -90,8 +90,8 @@ export async function populateGraphAndTable(data) {
   let offeredIntervalsForDay = [];
   let ahtIntervalsForDay = [];
   if (!weeklyMode) {
-    offeredIntervalsForDay = nContacts[selectedWeekDay];
-    ahtIntervalsForDay = aHandleTimes.intervalAverages[selectedWeekDay];
+    offeredIntervalsForDay = nContacts[selectedWeekDay] || [];
+    ahtIntervalsForDay = aHandleTimes.intervalAverages[selectedWeekDay] || [];
   }
 
   // Set daily & weekly level values
@@ -123,8 +123,8 @@ export async function populateGraphAndTable(data) {
         "values": intervals.map((x, i) => {
           let y1 = weeklyMode
             ? offeredDaysForWeek[i]
-            : offeredIntervalsForDay[i];
-          let y2 = weeklyMode ? ahtDaysForWeek[i] : ahtIntervalsForDay[i];
+            : offeredIntervalsForDay[i] || 0;
+          let y2 = weeklyMode ? ahtDaysForWeek[i] : ahtIntervalsForDay[i] || 0;
 
           return { x, y1, y2 };
         }),

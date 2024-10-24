@@ -43,6 +43,7 @@ const testMode = applicationConfig.testMode;
 // Generate outbound forecast data
 export async function generateForecast() {
   console.info("[OFG.GENERATE] Generation started");
+  const buTimeZone = applicationState.userInputs.businessUnit.settings.timeZone;
 
   applicationState.forecastOutputs.generatedForecast =
     applicationState.userInputs.planningGroups.map((pg) => ({
@@ -172,6 +173,53 @@ export async function generateForecast() {
         };
       }
     }
+  }
+
+  // Adjust forecast data for DST
+  function adjustForDST(forecastData, timeZone) {
+    const intervalsPerDay = 96; // Assuming 15-minute intervals
+    const totalIntervals = intervalsPerDay * 8; // 8 days
+
+    const startDate = DateTime.fromISO(applicationState.userInputs.startDate, {
+      zone: timeZone,
+    });
+    const endDate = startDate.plus({ days: 8 });
+
+    let adjustedData = [...forecastData];
+
+    for (let i = 0; i < 8; i++) {
+      const currentDate = startDate.plus({ days: i });
+      const nextDate = currentDate.plus({ days: 1 });
+
+      if (currentDate.offset !== nextDate.offset) {
+        const offsetChange = nextDate.offset - currentDate.offset;
+        const intervalChange = (offsetChange * intervalsPerDay) / 24;
+
+        if (intervalChange > 0) {
+          // Expand forecast data
+          adjustedData.splice(
+            (i + 1) * intervalsPerDay,
+            0,
+            ...new Array(intervalChange).fill(0)
+          );
+        } else if (intervalChange < 0) {
+          // Contract forecast data
+          const startInterval = (i + 1) * intervalsPerDay + intervalChange;
+          const endInterval = startInterval - intervalChange;
+          const duplicatedIntervals = adjustedData.slice(
+            startInterval,
+            endInterval
+          );
+          adjustedData.splice(
+            startInterval,
+            -intervalChange,
+            ...duplicatedIntervals
+          );
+        }
+      }
+    }
+
+    return adjustedData.slice(0, totalIntervals);
   }
 
   async function runFunctionOnGroup(group, func, funcName, ...args) {

@@ -198,6 +198,9 @@ async function loadPageTwo() {
     "#planning-groups-table tbody"
   );
 
+  // Clear the planning groups in the application state
+  applicationState.userInputs.planningGroups = [];
+
   // Function to create a table cell
   function createCell(textContent, dataId, dataValue) {
     const cell = document.createElement("td");
@@ -267,8 +270,8 @@ async function loadPageTwo() {
       // # Contacts column: Use createNumberInput function, disable if not matched
       const contactsCell = document.createElement("td");
       const numberInput = createNumberInput(
-        group.groupId,
-        group.groupName,
+        group.planningGroup.id,
+        group.planningGroup.name,
         isMatched
       );
       contactsCell.appendChild(numberInput);
@@ -375,6 +378,9 @@ async function loadPageTwo() {
 
   // Main logic for loading page two
   try {
+    // Clear the table body before appending new rows
+    planningGroupsTableBody.innerHTML = "";
+
     const [planningGroups, campaigns] = await Promise.all([
       getPlanningGroups(),
       getCampaigns(),
@@ -418,7 +424,7 @@ async function loadPageTwo() {
       await generateForecast();
       await loadPageThree();
     } catch (error) {
-      console.error("[OFG.UI] Forecast generation failed");
+      console.error("[OFG.UI] Forecast generation failed", error);
       switchPages("page-three", "page-four");
       await loadPageFour();
     }
@@ -613,8 +619,7 @@ function resetPageFour() {
   document.getElementById("import-fail-div").style.display = "none";
 
   // Reset open button to disabled
-  // Can't make this work easily - keep the button disabled for now
-  //document.getElementById("open-forecast-button").disabled = true;
+  document.getElementById("open-forecast-button").disabled = true;
 }
 
 function cleanUserInputs() {

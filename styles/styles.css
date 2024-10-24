@@ -159,23 +159,36 @@ footer img {
   padding-right: 12px;
 }
 
-@keyframes bulge {
-  0% {
-    transform: scale(1);
-    font-weight: normal;
-  }
-  50% {
-    transform: scale(1.1);
-    font-weight: bold;
-  }
-  100% {
-    transform: scale(1);
-    font-weight: normal;
-  }
+.status-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-message {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.status-icon {
+  flex-shrink: 0;
+  text-align: right;
 }
 
 .bulge-animation {
   animation: bulge 0.5s ease-in-out;
+}
+
+@keyframes bulge {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes flash {

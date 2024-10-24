@@ -3,6 +3,7 @@
 
 let applicationState = {
   forecastOutputs: { generatedForecast: null, modifiedForecast: null },
+  dls: { dls: false, offset: null },
   userInputs: {
     businessUnit: {
       name: null,

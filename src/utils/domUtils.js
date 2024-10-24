@@ -281,7 +281,12 @@ export function updateStatusMessage(step, status) {
 
   // Update the status message
   const stepToUpdate = document.getElementById(`import-step-${step}-status`);
-  stepToUpdate.innerHTML = messageText;
+  stepToUpdate.innerHTML = `
+    <div class="status-container">
+      <span class="status-message">${messageText}</span>
+      <span class="status-icon"></span>
+    </div>
+  `;
 
   // Apply the bulge animation
   stepToUpdate.classList.add("bulge-animation");
@@ -289,6 +294,7 @@ export function updateStatusMessage(step, status) {
   // Remove the animation class after it completes to allow re-triggering
   setTimeout(() => {
     stepToUpdate.classList.remove("bulge-animation");
-    stepToUpdate.appendChild(icon);
+    const iconContainer = stepToUpdate.querySelector(".status-icon");
+    iconContainer.appendChild(icon);
   }, 500); // Match the duration of the animation
 }
