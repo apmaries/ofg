@@ -7,6 +7,7 @@ import { applicationState } from "../core/stateManager.js";
 
 // Global variables
 ("use strict");
+let vegaView;
 
 // Function to get the value of a radio button group
 export function getRadioValue(ele) {
@@ -297,4 +298,123 @@ export function updateStatusMessage(step, status) {
     const iconContainer = stepToUpdate.querySelector(".status-icon");
     iconContainer.appendChild(icon);
   }, 500); // Match the duration of the animation
+}
+
+export function initializeVegaChart() {
+  const vegaSpec = {
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "width": 300,
+    "height": 360,
+    "padding": 5,
+    "data": [
+      {
+        "name": "table",
+        "values": [],
+      },
+    ],
+    "scales": [
+      {
+        "name": "x",
+        "type": "band",
+        "range": "width",
+        "domain": { "data": "table", "field": "x" },
+        "padding": 0.1,
+      },
+      {
+        "name": "y",
+        "type": "linear",
+        "range": "height",
+        "nice": true,
+        "zero": false,
+        "domain": { "data": "table", "field": "y1" },
+        "domainMin": 0,
+      },
+      {
+        "name": "y2",
+        "type": "linear",
+        "range": "height",
+        "nice": true,
+        "zero": false,
+        "domain": { "data": "table", "field": "y2" },
+        "domainMin": 0,
+      },
+    ],
+    "axes": [
+      {
+        "orient": "bottom",
+        "scale": "x",
+        "labelAngle": -90,
+        "labelPadding": 10,
+        "title": "Time (hours)",
+        "bandPosition": 0.5,
+        "labelAlign": "center",
+      },
+      { "orient": "left", "scale": "y", "title": "Offered" },
+      { "orient": "right", "scale": "y2", "title": "Average Handle Time" },
+    ],
+    "marks": [
+      {
+        "type": "rect",
+        "from": { "data": "table" },
+        "encode": {
+          "enter": {
+            "x": { "scale": "x", "field": "x" },
+            "width": { "scale": "x", "band": 1 },
+            "y": { "scale": "y", "field": "y1" },
+            "y2": { "scale": "y", "value": 0 },
+            "fill": { "value": "rgb(31, 119, 180)" },
+          },
+        },
+      },
+      {
+        "type": "line",
+        "from": { "data": "table" },
+        "encode": {
+          "enter": {
+            "x": { "scale": "x", "field": "x", "band": 0.5 },
+            "y": { "scale": "y2", "field": "y2" },
+            "stroke": { "value": "rgb(255, 127, 14)" },
+          },
+        },
+      },
+    ],
+  };
+
+  vegaView = new vega.View(vega.parse(vegaSpec), {
+    renderer: "canvas",
+    container: "#chart",
+    hover: true,
+  }).run();
+}
+
+export function updateVegaChart(data, weeklyMode, xAxisLabels) {
+  const {
+    intervals,
+    offeredIntervalsForDay,
+    ahtIntervalsForDay,
+    offeredDaysForWeek,
+    ahtDaysForWeek,
+  } = data;
+
+  // Rotate the daily totals arrays to align to BU start day of week for presentation
+  let rotatedOfferedDaysForWeek = rotateArrays(offeredDaysForWeek);
+  let rotatedAhtDaysForWeek = rotateArrays(ahtDaysForWeek);
+
+  vegaView
+    .change(
+      "table",
+      vega
+        .changeset()
+        .remove(() => true)
+        .insert(
+          intervals.map((x, i) => ({
+            x: xAxisLabels[i],
+            y1: weeklyMode
+              ? rotatedOfferedDaysForWeek[i]
+              : offeredIntervalsForDay[i],
+            y2: weeklyMode ? rotatedAhtDaysForWeek[i] : ahtIntervalsForDay[i],
+          }))
+        )
+    )
+    .run();
 }

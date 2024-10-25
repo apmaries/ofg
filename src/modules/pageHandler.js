@@ -30,6 +30,7 @@ import {
   updateLoadingMessage,
   switchPages,
   getNextWeekdayDate,
+  initializeVegaChart,
 } from "../utils/domUtils.js";
 import { addEvent, removeEventListeners } from "../utils/eventUtils.js";
 import {
@@ -602,6 +603,20 @@ function resetPageTwo() {
 }
 
 function resetPageThree() {
+  // Clear the planning group dropdown
+  const planningGroupDropdown = document.getElementById(
+    "planning-group-dropdown"
+  );
+  planningGroupDropdown.value = "";
+
+  // Clear the week day dropdown
+  const weekDayDropdown = document.getElementById("week-day-dropdown");
+  weekDayDropdown.value = "";
+
+  // Collapse the dropdown
+  planningGroupDropdown.removeAttribute("open");
+
+  // Reset the loading spinner and hide inbound forecast div
   updateLoadingMessage("generate-loading-message", "Generating forecast");
   resetLoadingSpinner("forecast-outputs-container", "generate-loading-div");
 }

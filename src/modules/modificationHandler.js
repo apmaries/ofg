@@ -14,6 +14,9 @@ import { rotateArrays } from "../utils/domUtils.js";
 // Global variables
 ("use strict");
 const testMode = applicationConfig.testMode;
+const dayNames = applicationConfig.daysOfWeek
+  .filter((day) => day.id !== "99")
+  .map((day) => day.name.slice(0, 3));
 
 /* MAIN FUNCTIONS START */
 // Function to get selected planning group data
@@ -69,225 +72,299 @@ export async function getSelectedPgForecastData(
   }
 }
 
-// Function to populate the UI data
-export async function populateGraphAndTable(data) {
-  let { selectedPgId, selectedWeekDay, fcValues } = data;
-  console.log(
-    `[OFG.MODIFICATIONS] [${selectedPgId}] Populating graph & table with data`
-  );
-
-  let nContacts = fcValues.nContacts;
-  let nHandled = fcValues.nHandled;
-  let tHandle = fcValues.tHandle;
-
-  const weeklyMode = selectedWeekDay === "99";
-
-  // Calculate totals and averages
-  let nContactTotals = calculateTotals(nContacts);
-  let aHandleTimes = calculateWeightedAverages(tHandle, nHandled);
-
-  // Set interval level data for daily mode
-  let offeredIntervalsForDay = [];
-  let ahtIntervalsForDay = [];
-  if (!weeklyMode) {
-    offeredIntervalsForDay = nContacts[selectedWeekDay] || [];
-    ahtIntervalsForDay = aHandleTimes.intervalAverages[selectedWeekDay] || [];
-  }
-
-  // Set daily & weekly level values
-  let offeredDaysForWeek = nContactTotals.dailyTotals;
-  let ahtDaysForWeek = aHandleTimes.dailyAverages;
-
-  let offeredTotalForWeek = nContactTotals.weeklyTotal;
-  let ahtTotalForWeek = aHandleTimes.weeklyAverage;
-
-  // Set forecast data in UI
-  updateTotalsTableDiv(
-    offeredTotalForWeek,
-    ahtTotalForWeek,
-    weeklyMode ? offeredDaysForWeek : offeredDaysForWeek[selectedWeekDay],
-    weeklyMode ? ahtDaysForWeek : ahtDaysForWeek[selectedWeekDay]
-  );
-
-  let { intervals, xAxisLabels } = generateIntervalsAndLabels(weeklyMode);
-
-  let vegaSpec = {
-    "$schema": "https://vega.github.io/schema/vega/v5.json",
-    "width": 300,
-    "height": 360,
-    "padding": 5,
-
-    "data": [
-      {
-        "name": "table",
-        "values": intervals.map((x, i) => {
-          let y1 = weeklyMode
-            ? offeredDaysForWeek[i]
-            : offeredIntervalsForDay[i] || 0;
-          let y2 = weeklyMode ? ahtDaysForWeek[i] : ahtIntervalsForDay[i] || 0;
-
-          return { x, y1, y2 };
-        }),
-      },
-    ],
-
-    "scales": [
-      {
-        "name": "x",
-        "type": "band",
-        "range": "width",
-        "domain": { "data": "table", "field": "x" },
-        "padding": 0.1,
-      },
-      {
-        "name": "y",
-        "type": "linear",
-        "range": "height",
-        "nice": true,
-        "zero": false,
-        "domain": { "data": "table", "field": "y1" },
-        "domainMin": 0,
-      },
-      {
-        "name": "y2",
-        "type": "linear",
-        "range": "height",
-        "nice": true,
-        "zero": false,
-        "domain": { "data": "table", "field": "y2" },
-        "domainMin": 0,
-      },
-    ],
-
-    "axes": [
-      {
-        "orient": "bottom",
-        "scale": "x",
-        "labelAngle": -90,
-        "labelPadding": 10,
-        "title": weeklyMode ? "Days" : "Time (hours)",
-        "bandPosition": 0.5, // Center the labels between the ticks
-        "labelAlign": "center", // Align labels to the center
-        "values": weeklyMode
-          ? xAxisLabels
-          : Array.from(
-              { length: 24 },
-              (_, i) => `${i.toString().padStart(2, "0")}:00`
-            ),
-      },
-      { "orient": "left", "scale": "y", "title": "Offered" },
-      { "orient": "right", "scale": "y2", "title": "Average Handle Time" },
-    ],
-
-    "marks": [
-      {
-        "type": "rect",
-        "from": { "data": "table" },
-        "encode": {
-          "enter": {
-            "x": { "scale": "x", "field": "x" },
-            "width": { "scale": "x", "band": 1 },
-            "y": { "scale": "y", "field": "y1" },
-            "y2": { "scale": "y", "value": 0 },
-            "fill": { "value": "rgb(31, 119, 180)" },
-          },
+let vegaView;
+const vegaSpec = {
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 300,
+  "height": 300,
+  "padding": 5,
+  "autosize": { "type": "pad", "resize": true, "contains": "padding" },
+  "signals": [
+    {
+      "name": "xAxisTitle",
+      "value": "Hour",
+    },
+    {
+      "name": "xAxisLabels",
+      "value": [
+        "00:00",
+        "01:00",
+        "02:00",
+        "03:00",
+        "04:00",
+        "05:00",
+        "06:00",
+        "07:00",
+        "08:00",
+        "09:00",
+        "10:00",
+        "11:00",
+        "12:00",
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
+        "18:00",
+        "19:00",
+        "20:00",
+        "21:00",
+        "22:00",
+        "23:00",
+      ],
+    },
+    {
+      "name": "yAxisTitle",
+      "value": "Offered",
+    },
+    {
+      "name": "y2AxisTitle",
+      "value": "Average Handle Time",
+    },
+  ],
+  "data": [
+    {
+      "name": "table",
+      "values": [],
+    },
+  ],
+  "scales": [
+    {
+      "name": "x",
+      "type": "band",
+      "domain": { "data": "table", "field": "x" },
+      "range": "width",
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "domain": { "data": "table", "field": "y1" },
+      "range": "height",
+    },
+    {
+      "name": "y2",
+      "type": "linear",
+      "domain": { "data": "table", "field": "y2" },
+      "range": "height",
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": { "data": "table", "field": "c" },
+      "range": { "scheme": "category10" },
+    },
+  ],
+  "axes": [
+    {
+      "orient": "bottom",
+      "scale": "x",
+      "labelAngle": 0,
+      "labelPadding": 10,
+      "labelBound": false,
+      "labelOverlap": "greedy",
+      "title": { "signal": "xAxisTitle" },
+      "bandPosition": 0,
+      "labelAlign": "center",
+      "values": { "signal": "xAxisLabels" },
+      "grid": true,
+    },
+    { "orient": "left", "scale": "y", "title": { "signal": "yAxisTitle" } },
+    { "orient": "right", "scale": "y2", "title": { "signal": "y2AxisTitle" } },
+  ],
+  "marks": [
+    {
+      "type": "rect",
+      "from": { "data": "table" },
+      "encode": {
+        "enter": {
+          "x": { "scale": "x", "field": "x" },
+          "width": { "scale": "x", "band": 1 },
+          "y": { "scale": "y", "field": "y1" },
+          "y2": { "scale": "y", "value": 0 },
+          "fill": { "scale": "color", "field": "c" },
         },
       },
-      {
-        "type": "line",
-        "from": { "data": "table" },
-        "encode": {
-          "enter": {
-            "x": { "scale": "x", "field": "x", "band": 0.5 },
-            "y": { "scale": "y2", "field": "y2" },
-            "stroke": { "value": "rgb(255, 127, 14)" },
-          },
+    },
+    {
+      "type": "line",
+      "from": { "data": "table" },
+      "encode": {
+        "enter": {
+          "x": { "scale": "x", "field": "x", "band": 0.5 },
+          "y": { "scale": "y2", "field": "y2" },
+          "stroke": { "value": "rgb(255, 127, 14)" },
         },
       },
-      weeklyMode
-        ? {
-            "type": "symbol",
-            "from": { "data": "table" },
-            "encode": {
-              "enter": {
-                "x": { "scale": "x", "field": "x", "band": 0.5 },
-                "y": { "scale": "y2", "field": "y2" },
-                "fill": { "value": "rgb(255, 127, 14)" },
-                "size": { "value": 50 },
-              },
-            },
-          }
-        : {
-            "type": "symbol",
-            "from": { "data": "table" },
-            "encode": {
-              "enter": {
-                "x": { "scale": "x", "field": "x", "band": 0.5 },
-                "y": { "scale": "y2", "field": "y2" },
-                "fill": { "value": "rgb(255, 127, 14)" },
-                "size": { "value": 0 },
-              },
-            },
-          },
-    ],
-  };
+    },
+  ],
+};
 
-  let view = new vega.View(vega.parse(vegaSpec), {
-    renderer: "canvas",
+function initializeVegaChart() {
+  vegaView = new vega.View(vega.parse(vegaSpec), {
+    // logLevel: vega.Debug, // view logging level
+    renderer: "svg",
     container: "#chart",
     hover: true,
-  });
+  }).run();
+}
+
+function updateVegaChart(data, weeklyMode, xAxisLabels) {
+  const {
+    intervals,
+    offeredIntervalsForDay,
+    ahtIntervalsForDay,
+    offeredDaysForWeek,
+    ahtDaysForWeek,
+  } = data;
 
   // Rotate the daily totals arrays to align to BU start day of week for presentation
   let rotatedOfferedDaysForWeek = rotateArrays(offeredDaysForWeek);
   let rotatedAhtDaysForWeek = rotateArrays(ahtDaysForWeek);
 
-  view
+  // Update the x-axis values
+  if (weeklyMode) {
+    console.log("[OFG.MODIFICATIONS] Weekly mode: Show day names", xAxisLabels);
+
+    // Weekly mode: Show day names
+    vegaView.signal("xAxisTitle", "Days").run();
+    vegaView.signal("xAxisLabels", xAxisLabels).run();
+  } else {
+    // Daily mode: Show only every hour
+    const hourlyLabels = Array.from(
+      { length: 24 },
+      (_, i) => `${i.toString().padStart(2, "0")}:00`
+    );
+    vegaView.signal("xAxisTitle", "Time (hours)").run();
+    vegaView.signal("xAxisLabels", hourlyLabels).run();
+    console.log(
+      "[OFG.MODIFICATIONS] Daily mode: Show hourly labels",
+      hourlyLabels
+    );
+  }
+
+  // Update the y-axis values
+  vegaView.signal("yAxisTitle", "Offered");
+  vegaView.signal("y2AxisTitle", "Average Handle Time");
+
+  // Run all signals
+  vegaView.run();
+
+  // Log the transformed data to the console
+  const transformedData = intervals.map((x, i) => {
+    let y1 = weeklyMode
+      ? rotatedOfferedDaysForWeek[i]
+      : offeredIntervalsForDay[i] || 0;
+    let y2 = weeklyMode ? rotatedAhtDaysForWeek[i] : ahtIntervalsForDay[i] || 0;
+
+    // Use xAxisLabels for x value
+    let xValue = xAxisLabels[i];
+
+    return { x: xValue, y1, y2 };
+  });
+
+  console.log("[OFG.MODIFICATIONS] Transformed data:", transformedData);
+
+  vegaView
     .change(
       "table",
       vega
         .changeset()
         .remove(() => true)
-        .insert(
-          intervals.map((x, i) => ({
-            x: xAxisLabels[i],
-            y1: weeklyMode
-              ? rotatedOfferedDaysForWeek[i]
-              : offeredIntervalsForDay[i],
-            y2: weeklyMode ? rotatedAhtDaysForWeek[i] : ahtIntervalsForDay[i],
-          }))
-        )
+        .insert(transformedData)
     )
     .run();
-
-  // Unhide the totals table div
-  const totalsTableDiv = document.getElementById("totals-table");
-  totalsTableDiv.hidden = false;
-
-  let dayTotalFcTrH = document.getElementById("fc-day-tr-heading");
-  weeklyMode
-    ? (dayTotalFcTrH.innerHTML = "Days")
-    : (dayTotalFcTrH.innerHTML = "Day");
-
-  // Unhide the controls div
-  const controlsDiv = document.getElementById("controls");
-  controlsDiv.hidden = false;
-
-  initializeModificationListeners(data);
 }
+
+// Function to populate the UI data
+export async function populateGraphAndTable(data) {
+  let { selectedPgId, selectedWeekDay, fcValues } = data;
+
+  if (selectedWeekDay !== undefined) {
+    console.log(
+      `[OFG.MODIFICATIONS] [${selectedPgId}] Populating graph & table with data`
+    );
+
+    let nContacts = fcValues.nContacts;
+    let nHandled = fcValues.nHandled;
+    let tHandle = fcValues.tHandle;
+
+    const weeklyMode = selectedWeekDay === "99";
+
+    // Calculate totals and averages
+    let nContactTotals = calculateTotals(nContacts);
+    let aHandleTimes = calculateWeightedAverages(tHandle, nHandled);
+
+    // Set interval level data for daily mode
+    let offeredIntervalsForDay = [];
+    let ahtIntervalsForDay = [];
+    if (!weeklyMode) {
+      offeredIntervalsForDay = nContacts[selectedWeekDay] || [];
+      ahtIntervalsForDay = aHandleTimes.intervalAverages[selectedWeekDay] || [];
+    }
+
+    // Set daily & weekly level values
+    let offeredDaysForWeek = nContactTotals.dailyTotals;
+    let ahtDaysForWeek = aHandleTimes.dailyAverages;
+
+    let offeredTotalForWeek = nContactTotals.weeklyTotal;
+    let ahtTotalForWeek = aHandleTimes.weeklyAverage;
+
+    // Set forecast data in UI
+    updateTotalsTableDiv(
+      selectedWeekDay,
+      offeredTotalForWeek,
+      ahtTotalForWeek,
+      weeklyMode ? offeredDaysForWeek : offeredDaysForWeek[selectedWeekDay],
+      weeklyMode ? ahtDaysForWeek : ahtDaysForWeek[selectedWeekDay]
+    );
+
+    let { intervals, xAxisLabels } = generateIntervalsAndLabels(weeklyMode);
+
+    // Update the Vega chart with new data
+    updateVegaChart(
+      {
+        intervals,
+        offeredIntervalsForDay,
+        ahtIntervalsForDay,
+        offeredDaysForWeek,
+        ahtDaysForWeek,
+      },
+      weeklyMode,
+      xAxisLabels
+    );
+
+    // Unhide the totals table div
+    const totalsTableDiv = document.getElementById("totals-table");
+    totalsTableDiv.hidden = false;
+
+    // Unhide the controls div
+    const controlsDiv = document.getElementById("controls");
+    controlsDiv.hidden = false;
+
+    initializeModificationListeners(data);
+  }
+}
+
+// Initialize the Vega chart on page load
+document.addEventListener("DOMContentLoaded", () => {
+  initializeVegaChart();
+});
+
+// Initialize the Vega chart on page load
+document.addEventListener("DOMContentLoaded", () => {
+  initializeVegaChart();
+});
 /* MAIN FUNCTIONS END */
 
 /* HELPER FUNCTIONS START */
-// Function to generate intervals and xAxisLabels
+// Function to generate intervals and day name labels
 function generateIntervalsAndLabels(weeklyMode) {
   let intervals, xAxisLabels;
 
   if (weeklyMode) {
     // Generate intervals and labels for the week, ignoring "All"
     intervals = Array.from({ length: 7 }, (_, i) => i);
-    xAxisLabels = applicationConfig.daysOfWeek
-      .filter((day) => day.id !== "99")
-      .map((day) => day.name.slice(0, 3)); // Get first 3 characters for short names
+    xAxisLabels = dayNames;
   } else {
     // Generate intervals and labels for the day
     intervals = Array.from({ length: 96 }, (_, i) => {
@@ -304,7 +381,13 @@ function generateIntervalsAndLabels(weeklyMode) {
 }
 
 // Function to set forecast data totals in UI
-function updateTotalsTableDiv(offeredWeek, ahtWeek, offeredDay, ahtDay) {
+function updateTotalsTableDiv(
+  selectedWeekDay,
+  offeredWeek,
+  ahtWeek,
+  offeredDay,
+  ahtDay
+) {
   document.getElementById("fc-week-offered").textContent = parseFloat(
     offeredWeek.toFixed(1)
   ).toLocaleString("en", { minimumFractionDigits: 1 });
@@ -312,9 +395,13 @@ function updateTotalsTableDiv(offeredWeek, ahtWeek, offeredDay, ahtDay) {
     ahtWeek.toFixed(1)
   ).toLocaleString("en", { minimumFractionDigits: 1 });
 
-  if (Array.isArray(offeredDay)) {
+  const weeklyMode = selectedWeekDay === "99";
+
+  if (weeklyMode) {
     // Rotate the daily totals array to align to BU start day of week for presentation
     let rotatedOfferedDay = rotateArrays(offeredDay);
+    let rotatedAhtDay = rotateArrays(ahtDay);
+
     document.getElementById("fc-day-offered").innerHTML = rotatedOfferedDay
       .map((day) =>
         parseFloat(day.toFixed(1)).toLocaleString("en", {
@@ -322,15 +409,7 @@ function updateTotalsTableDiv(offeredWeek, ahtWeek, offeredDay, ahtDay) {
         })
       )
       .join("<br>");
-  } else if (offeredDay) {
-    document.getElementById("fc-day-offered").textContent = parseFloat(
-      offeredDay.toFixed(1)
-    ).toLocaleString("en", { minimumFractionDigits: 1 });
-  }
 
-  if (Array.isArray(ahtDay)) {
-    // Rotate the daily totals array to align to BU start day of week for presentation
-    let rotatedAhtDay = rotateArrays(ahtDay);
     document.getElementById("fc-day-aht").innerHTML = rotatedAhtDay
       .map((day) =>
         parseFloat(day.toFixed(1)).toLocaleString("en", {
@@ -338,10 +417,19 @@ function updateTotalsTableDiv(offeredWeek, ahtWeek, offeredDay, ahtDay) {
         })
       )
       .join("<br>");
-  } else if (ahtDay) {
+
+    document.getElementById("fc-day-names").innerHTML = dayNames.join("<br>");
+  } else {
+    const dayName = applicationConfig.daysOfWeek.find(
+      (day) => day.id === selectedWeekDay
+    )?.name;
+    document.getElementById("fc-day-offered").textContent = parseFloat(
+      offeredDay.toFixed(1)
+    ).toLocaleString("en", { minimumFractionDigits: 1 });
     document.getElementById("fc-day-aht").textContent = parseFloat(
       ahtDay.toFixed(1)
     ).toLocaleString("en", { minimumFractionDigits: 1 });
+    document.getElementById("fc-day-names").textContent = dayName;
   }
 }
 
