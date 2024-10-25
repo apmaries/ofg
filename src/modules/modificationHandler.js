@@ -211,7 +211,6 @@ const vegaSpec = {
 
 function initializeVegaChart() {
   vegaView = new vega.View(vega.parse(vegaSpec), {
-    // logLevel: vega.Debug, // view logging level
     renderer: "svg",
     container: "#chart",
     hover: true,

@@ -206,3 +206,18 @@ footer img {
 .flash {
   animation: flash 0.5s linear;
 }
+
+#chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Adjust as needed */
+  width: 100%; /* Adjust as needed */
+}
+
+#chart {
+  width: 100%; /* Adjust as needed */
+  height: 100%; /* Adjust as needed */
+  display: flex;
+  justify-content: center;
+}
