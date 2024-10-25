@@ -168,8 +168,18 @@ const vegaSpec = {
       "values": { "signal": "xAxisLabels" },
       "grid": true,
     },
-    { "orient": "left", "scale": "y", "title": { "signal": "yAxisTitle" } },
-    { "orient": "right", "scale": "y2", "title": { "signal": "y2AxisTitle" } },
+    {
+      "orient": "left",
+      "scale": "y",
+      "title": { "signal": "yAxisTitle" },
+      "format": "~s",
+    },
+    {
+      "orient": "right",
+      "scale": "y2",
+      "title": { "signal": "y2AxisTitle" },
+      "format": "~s",
+    },
   ],
   "marks": [
     {
@@ -181,7 +191,7 @@ const vegaSpec = {
           "width": { "scale": "x", "band": 1 },
           "y": { "scale": "y", "field": "y1" },
           "y2": { "scale": "y", "value": 0 },
-          "fill": { "scale": "color", "field": "c" },
+          "fill": { "value": "rgb(31, 119, 180)" },
         },
       },
     },
